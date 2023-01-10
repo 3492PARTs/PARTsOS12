@@ -21,18 +21,5 @@ public class TalonSRXDistanceValue implements EncoderValueInterface<TalonSRX>{
         return talonSRX.getSelectedSensorPosition();
     
     }
-
-    @Override
-    public void setConversionFactor(double distPerRot) {
-
-        this.distPerRot = distPerRot;
-        
-    }
-
-    @Override
-    public double getDistanceInches() {
-
-        return getDistanceRaw() * distPerRot;
-    }
     
 }

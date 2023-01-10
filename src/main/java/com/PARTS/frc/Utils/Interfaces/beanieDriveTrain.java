@@ -4,6 +4,8 @@
 
 package com.PARTS.frc.Utils.Interfaces;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -14,12 +16,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /** Add your docs here. */
 public abstract class beanieDriveTrain extends SubsystemBase {
 
-    Gyro gyro;
+    AHRS gyro;
     protected DifferentialDrive mDrive;
     protected MotorControllerGroup leftControllerGroup, rightControllerGroup;
 
 
-    public beanieDriveTrain(Gyro gyro, MotorControllerGroup leftControllerGroup, MotorControllerGroup rightMotorControllerGroup){
+    public beanieDriveTrain(AHRS gyro, MotorControllerGroup leftControllerGroup, MotorControllerGroup rightMotorControllerGroup){
         this.gyro = gyro;
         this.leftControllerGroup = leftControllerGroup;
         this.rightControllerGroup = rightMotorControllerGroup;

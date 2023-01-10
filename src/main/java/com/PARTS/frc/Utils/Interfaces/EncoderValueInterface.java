@@ -9,8 +9,4 @@ public interface EncoderValueInterface<T> {
 
 public double getDistanceRaw();
 
-public void setConversionFactor(double distPerRot);
-
-public double getDistanceInches();
-
 }

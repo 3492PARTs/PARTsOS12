@@ -24,20 +24,5 @@ public class SparkMaxDistanceValue implements EncoderValueInterface<CANSparkMax>
 
 
 
-    @Override
-    public void setConversionFactor(double distPerRot) {
-        // TODO Auto-generated method stub
-        this.distPerRot = distPerRot;
-        
-        
-    }
-
-    @Override
-    public double getDistanceInches() {
-        // TODO Auto-generated method stub
-        return getDistanceRaw() * distPerRot;
-    }
-
-
 
 }
