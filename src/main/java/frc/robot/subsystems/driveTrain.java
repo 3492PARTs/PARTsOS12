@@ -73,4 +73,15 @@ public class driveTrain extends beanieDriveTrain {
     // This method will be called once per scheduler run
     dEstimator.update(getRotation(), leftDistance(), rightDistance());
   }
+
+  @Override
+  public void autonomousSetup() {
+        
+  }
+
+  @Override
+  public void teleopSetup() {
+    // TODO Auto-generated method stub
+    
+  }
 }
