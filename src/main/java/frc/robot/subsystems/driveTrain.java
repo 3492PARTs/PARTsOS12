@@ -8,11 +8,13 @@ import com.kauailabs.navx.frc.AHRS;
 
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
 import PARTSlib2023.PARTS.frc.Utils.sensors.wheelLinearDistance;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.updatePoseVisually;
 
 public class driveTrain extends beanieDriveTrain {
 
@@ -31,7 +33,16 @@ public class driveTrain extends beanieDriveTrain {
   }
 
   @Override
-  public beanieDriveTrain getInstance() {
+  public beanieDriveTrain getInstance(){
+    return mDriveTrain;
+  }
+
+
+  public void updatePoseVisually(Pair<Pose2d, Double> poseAndLatency){
+    dEstimator.addVisionMeasurement(poseAndLatency.getFirst(), poseAndLatency.getSecond());
+  }
+
+  public static driveTrain getDriveTrainInstance() {
       return mDriveTrain;
   }
 
@@ -72,5 +83,6 @@ public class driveTrain extends beanieDriveTrain {
   public void periodic() {
     // This method will be called once per scheduler run
     dEstimator.update(getRotation(), leftDistance(), rightDistance());
+    new updatePoseVisually().schedule();
   }
 }

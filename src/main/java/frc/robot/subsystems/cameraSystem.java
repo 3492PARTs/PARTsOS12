@@ -30,12 +30,16 @@ public class cameraSystem extends SubsystemBase {
   PhotonCamera cam = new PhotonCamera("testCamera");
   Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
   RobotPoseEstimator robotPoseEstimator;
+
+  private static cameraSystem m_CameraSystem = new cameraSystem();
     // ... Add other cameras here
 
     // Assemble the list of cameras & mount locations
   ArrayList<Pair<PhotonCamera, Transform3d>> camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
 
-  
+  public static cameraSystem getCameraSystem(){
+    return m_CameraSystem;
+  }
     
   
   
