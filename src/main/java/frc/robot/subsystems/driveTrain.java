@@ -85,4 +85,15 @@ public class driveTrain extends beanieDriveTrain {
     dEstimator.update(getRotation(), leftDistance(), rightDistance());
     new updatePoseVisually().schedule();
   }
+
+  @Override
+  public void autonomousSetup() {
+        
+  }
+
+  @Override
+  public void teleopSetup() {
+    // TODO Auto-generated method stub
+    
+  }
 }
