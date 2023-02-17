@@ -73,7 +73,7 @@ public class driveTrain extends beanieDriveTrain {
   @Override
   public double leftDistance() {
       // TODO Auto-generated method stub
-      return wheelAverage(leftWheels);
+      return -wheelAverage(leftWheels);
   }
 
 
