@@ -10,16 +10,12 @@ import java.util.function.Supplier;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.RamseteAutoBuilder;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import PARTSlib2023.PARTS.frc.Utils.Interfaces.SparkMaxDistanceValue;
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
 import PARTSlib2023.PARTS.frc.Utils.sensors.wheelLinearDistance;
-import PARTSlib2023.PARTS.frc.commands.joystickDrive;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -31,16 +27,8 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 
 public class driveTrain extends beanieDriveTrain {
 
@@ -59,9 +47,11 @@ public class driveTrain extends beanieDriveTrain {
 
     static CANSparkMax left1 = new CANSparkMax(9, MotorType.kBrushless);
     static CANSparkMax left2 = new CANSparkMax(24, MotorType.kBrushless);
+    static CANSparkMax left3 = new CANSparkMax(24, MotorType.kBrushless);
 
     static CANSparkMax right1 = new CANSparkMax(20, MotorType.kBrushless);
     static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
+    static CANSparkMax right3 = new CANSparkMax(20, MotorType.kBrushless);
 
     
 
@@ -85,7 +75,7 @@ public class driveTrain extends beanieDriveTrain {
 
   /** Creates a new driveTrain. */
   public driveTrain() {
-    super(new AHRS() , new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));     
+    super(new AHRS() , new MotorControllerGroup(left1, left2, left3), new MotorControllerGroup(right1, right2, right3));     
     Shuffleboard.getTab("primary").add(m_field);
 
 
