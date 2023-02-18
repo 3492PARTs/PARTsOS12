@@ -11,14 +11,20 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
 import org.photonvision.RobotPoseEstimator.PoseStrategy;
 
+import PARTSlib2023.PARTS.frc.Utils.Controls.beanieController;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,6 +36,11 @@ public class cameraSystem extends SubsystemBase {
   PhotonCamera cam = new PhotonCamera("testCamera");
   Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
   RobotPoseEstimator robotPoseEstimator;
+  UsbCamera frontCamera;
+  UsbCamera reverseCamera;
+  VideoSink server;
+
+  
 
   private static cameraSystem m_CameraSystem = new cameraSystem();
     // ... Add other cameras here
@@ -38,6 +49,7 @@ public class cameraSystem extends SubsystemBase {
   ArrayList<Pair<PhotonCamera, Transform3d>> camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
 
   public static cameraSystem getCameraSystem(){
+
     return m_CameraSystem;
   }
     
@@ -53,6 +65,28 @@ public class cameraSystem extends SubsystemBase {
       }
       robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, camList);
 
+      frontCamera = CameraServer.startAutomaticCapture(0);
+      frontCamera.setResolution(300, 300);
+      reverseCamera = CameraServer.startAutomaticCapture(1);
+      reverseCamera.setResolution(300, 300);
+
+      frontCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+      reverseCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+
+      server = CameraServer.getServer();
+
+  
+
+  }
+
+  public void changeCamera(beanieController controller){
+    if (controller.getLeftYAxis() >= 0) {
+      // System.out.println("Setting camera 2");
+      server.setSource(frontCamera);
+  } else if (controller.getLeftYAxis() < 0) {
+      // System.out.println("Setting camera 1");
+      server.setSource(reverseCamera);
+  }
   }
 
   public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
