@@ -25,6 +25,8 @@ public class updatePoseVisually extends CommandBase {
   public void initialize() {
     dtrain = driveTrain.getDriveTrainInstance();
     cSystem = cameraSystem.getCameraSystem();
+
+    System.out.println("pose updated visually");
   
   }
 
