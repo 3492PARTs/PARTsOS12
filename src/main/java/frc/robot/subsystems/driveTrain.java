@@ -4,12 +4,17 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -22,6 +27,8 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
@@ -31,6 +38,20 @@ import frc.robot.commands.updatePoseVisually;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.interpolation.Interpolatable;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.util.WPIUtilJNI;
 
 public class driveTrain extends beanieDriveTrain {
 
@@ -44,15 +65,16 @@ public class driveTrain extends beanieDriveTrain {
 
   static CANSparkMax left1 = new CANSparkMax(9, MotorType.kBrushless);
   static CANSparkMax left2 = new CANSparkMax(24, MotorType.kBrushless);
-  static CANSparkMax left3 = new CANSparkMax(24, MotorType.kBrushless);
+  static CANSparkMax left3 = new CANSparkMax(25, MotorType.kBrushless);
 
   static CANSparkMax right1 = new CANSparkMax(20, MotorType.kBrushless);
   static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
-  static CANSparkMax right3 = new CANSparkMax(20, MotorType.kBrushless);
+  static CANSparkMax right3 = new CANSparkMax(19, MotorType.kBrushless);
 
   DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics(Units.inchesToMeters(21.12)); // tbd
   DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(),
-      leftDistance(), rightDistance(), new Pose2d(1.0, 3.0, getRotation()));
+      leftDistance(), rightDistance(), new Pose2d(1.0, 3.0, getRotation())); 
+
   private static driveTrain mDriveTrain = new driveTrain();
   private static double kv = 1.055;
   private static double ka = .27947;
@@ -144,6 +166,23 @@ public class driveTrain extends beanieDriveTrain {
     m_field.setRobotPose(dEstimator.getEstimatedPosition());
   }
 
+  public PathPlannerTrajectory generateTrajectoryToPoint(trajectories pathToRun){
+    HashMap<trajectories, ArrayList<PathPoint>> trajectoryMap = new HashMap<>();
+    ArrayList<PathPoint> midToPickup = new ArrayList<>();
+
+    PathPlannerTrajectory midToPickupTraj = PathPlanner.generatePath(
+      new PathConstraints(4, 3) , midToPickup);
+
+
+
+    return PathPlanner.generatePath(new PathConstraints(4, 3) , trajectoryMap.get(midToPickup));
+
+
+
+    
+
+  }
+
   @Override
   public void autonomousSetup() {
     // TODO Auto-generated method stub
@@ -216,6 +255,7 @@ public class driveTrain extends beanieDriveTrain {
                                       // use feedforwards.
         new PIDController(.06, 0, 0),
         driveTrain.geDriveTrain().getBiConsumer(),
+        true,
         this);
 
     return controller1;

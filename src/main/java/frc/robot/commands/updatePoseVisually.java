@@ -43,6 +43,8 @@ public class updatePoseVisually extends CommandBase {
     else{
       dtrain.updatePoseVisually(pose);
     }
+
+    System.out.println(dtrain.getPoseSupplier().get());
   }
 
   // Returns true when the command should end.
