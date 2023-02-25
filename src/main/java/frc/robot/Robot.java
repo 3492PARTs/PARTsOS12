@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
 import PARTSlib2023.PARTS.frc.commands.joystickDrive;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -85,6 +87,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    driveTrain.geDriveTrain().setDefaultCommand(new joystickDrive(driveTrain.getDriveTrainInstance(), RobotContainer.dController));
   }
 
   /** This function is called periodically during operator control. */
