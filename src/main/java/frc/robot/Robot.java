@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import PARTSlib2023.PARTS.frc.commands.joystickDrive;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.cameraSystem;
+import frc.robot.subsystems.driveTrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,6 +34,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    NetworkTableInstance.getDefault().getEntry("/CameraPublisher/FishEyes/streams").setStringArray(new String[]{"mjpg:http://10.34.92.2:8008/?action=stream"});
+
   }
 
   /**
@@ -95,6 +100,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    driveTrain.geDriveTrain().setDefaultCommand(new joystickDrive(driveTrain.geDriveTrain(), RobotContainer.dController));
   }
 
   /** This function is called periodically during test mode. */

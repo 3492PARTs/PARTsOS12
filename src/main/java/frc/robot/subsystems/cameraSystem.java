@@ -15,8 +15,11 @@ import PARTSlib2023.PARTS.frc.Utils.Controls.beanieController;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,6 +29,8 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class cameraSystem extends SubsystemBase {
@@ -38,8 +43,8 @@ public class cameraSystem extends SubsystemBase {
   RobotPoseEstimator robotPoseEstimator;
   UsbCamera frontCamera;
   UsbCamera reverseCamera;
-  VideoSink server;
-
+  MjpegServer view;
+ 
   
 
   private static cameraSystem m_CameraSystem = new cameraSystem();
@@ -66,26 +71,36 @@ public class cameraSystem extends SubsystemBase {
       robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, camList);
 
       frontCamera = CameraServer.startAutomaticCapture(0);
-      frontCamera.setResolution(300, 300);
+      frontCamera.setResolution(50, 50);
+      frontCamera.setPixelFormat(PixelFormat.kMJPEG);
       reverseCamera = CameraServer.startAutomaticCapture(1);
-      reverseCamera.setResolution(300, 300);
+      reverseCamera.setResolution(50, 50);
+      reverseCamera.setPixelFormat(PixelFormat.kMJPEG);
+
+      frontCamera.setFPS(10);
+      reverseCamera.setFPS(10);
 
       frontCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
       reverseCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+      
 
-      server = CameraServer.getServer();
+      view = new MjpegServer("primary view", "", 8008);
+      view.setSource(frontCamera);
 
-  
+
+      CameraServer.addServer(view);
 
   }
 
   public void changeCamera(beanieController controller){
     if (controller.getLeftYAxis() >= 0) {
       // System.out.println("Setting camera 2");
-      server.setSource(frontCamera);
+      view.setSource(frontCamera);
+
   } else if (controller.getLeftYAxis() < 0) {
       // System.out.println("Setting camera 1");
-      server.setSource(reverseCamera);
+      view.setSource(reverseCamera);
+
   }
   }
 
