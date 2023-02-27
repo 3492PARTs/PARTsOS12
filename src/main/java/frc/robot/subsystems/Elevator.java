@@ -48,9 +48,6 @@ public class Elevator extends SubsystemBase {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
     linearMotor = new CANSparkMax(9, MotorType.kBrushless);
 
-    leftGripper = new TalonSRX(13);
-    rightGripper = new TalonSRX(29);
-
     pivotLeader.setSmartCurrentLimit(30);
     pivotLeader.setSecondaryCurrentLimit(30);
     pivot1Controller = pivotLeader.getPIDController();
@@ -82,7 +79,6 @@ public class Elevator extends SubsystemBase {
     Shuffleboard.getTab("debug").addNumber("arm angular velocity", getAnglularVelocitySupplier());
     Shuffleboard.getTab("debug").addNumber("arm Linear Extension", getExtensionDistanceSupplier());
     Shuffleboard.getTab("debug").addNumber("arm linear velocity", getExtensionRateSupplier());
-
 
   }
 
@@ -133,11 +129,6 @@ public class Elevator extends SubsystemBase {
 
   public void setLinearSpeed(double speed) {
     linearMotor.set(speed);
-  }
-
-  public void runGripper(double speed) {
-    leftGripper.set(ControlMode.PercentOutput, speed);
-    rightGripper.set(ControlMode.PercentOutput, speed);
   }
 
   public void zeroPivotEncoder() {
