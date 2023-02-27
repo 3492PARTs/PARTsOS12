@@ -18,10 +18,19 @@ public final class Constants {
   }
 
   public static enum elevatorState {
-    home,
-    level1,
-    level2,
-    shelf
+    home(0),
+    level1(1),
+    level2(2),
+    shelf(3);
+    private final int value;
+
+    elevatorState(final int currentState){
+      this.value = currentState;
+    }
+
+    public int getState(){
+      return value;
+    }
   }
   public static String debugTab = "Debug"; 
 }

@@ -22,12 +22,14 @@ public class linearExtender extends SubsystemBase {
   CANSparkMax linearMotor;
   SparkMaxPIDController linear1Controller;
   double wheelCircumference = 1;
+  private elevatorState state;
   // state , extension distance
   public static HashMap<elevatorState, Double> extenderStateMap;
 
   static linearExtender extender = new linearExtender();
   /** Creates a new linearExtender. */
   public linearExtender() {
+    state = elevatorState.home;
     linearMotor = new CANSparkMax(9, MotorType.kBrushless);
     linearMotor.setSmartCurrentLimit(15, 15);
     linear1Controller = linearMotor.getPIDController();
@@ -70,6 +72,19 @@ public class linearExtender extends SubsystemBase {
     linear1Controller.setReference(extensionMeters * linearGearRatio, ControlType.kPosition);
   }
 
+  public void incrementState(){
+    if(state.getState() == 3){
+      return;
+    }
+    this.state = elevatorState.values()[state.getState()+1];
+  }
+
+  public void decrementState(){
+    if(state.getState() == 0){
+      return;
+    }
+    this.state = elevatorState.values()[state.getState()-1];
+  }
   
   public void zeroPivotEncoder() {
     linearMotor.getEncoder().setPosition(0);

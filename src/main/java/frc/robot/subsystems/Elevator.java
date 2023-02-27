@@ -29,6 +29,7 @@ import frc.robot.Constants.elevatorState;
 public class Elevator extends SubsystemBase {
   // angle, distance extended
   public static HashMap<elevatorState, Double> elevatorStateMap;
+  
 
   double kS;
   double kG;
@@ -45,6 +46,8 @@ public class Elevator extends SubsystemBase {
 
   double wheelCircumference;
 
+  elevatorState state;
+
   private static Elevator m_elevator = new Elevator();
 
   /** Creates a new Elevator. */
@@ -55,6 +58,7 @@ public class Elevator extends SubsystemBase {
   // add.
   public Elevator() {
 
+    state = elevatorState.home;
     System.out.println("made elevator");
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
 
@@ -81,6 +85,8 @@ public class Elevator extends SubsystemBase {
     // linear1Controller.setIZone(kIz);
     // linear1Controller.setFF(kFF);
     // linear1Controller.setOutputRange(-.1, .08);
+
+    elevatorStateMap.put(elevatorState.home, 0d);
 
     Shuffleboard.getTab(Constants.debugTab).addNumber("arm angle", getAngleSupplier());
     Shuffleboard.getTab(Constants.debugTab).addNumber("arm angular velocity", getAnglularVelocitySupplier());
@@ -109,6 +115,20 @@ public class Elevator extends SubsystemBase {
   public DoubleSupplier getAnglularVelocitySupplier() {
     DoubleSupplier s = () -> getRotationRate();
     return s;
+  }
+
+  public void incrementState(){
+    if(state.getState() == 3){
+      return;
+    }
+    this.state = elevatorState.values()[state.getState()+1];
+  }
+
+  public void decrementState(){
+    if(state.getState() == 0){
+      return;
+    }
+    this.state = elevatorState.values()[state.getState()-1];
   }
 
   public void setPivotSpeed(double speed) {
