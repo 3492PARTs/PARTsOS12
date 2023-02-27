@@ -36,7 +36,7 @@ public class Elevator extends SubsystemBase {
   TalonSRX leftGripper;
   TalonSRX rightGripper;
 
-  double pivotGearRatio = 48.0;
+  double pivotGearRatio = 32.0; //TODO: ask for gear ratio
   double linearGearRatio = 4.0;
 
   double wheelCircumference;
