@@ -2,40 +2,39 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Gripper;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Gripper;
 
-public class controlLinear extends CommandBase {
-  /** Creates a new controlLinear. */
-  double extension;
-  public controlLinear(double extension) {
+public class holdGripper extends CommandBase {
+  /** Creates a new holdGripper. */
+  public holdGripper() {
+    addRequirements(Gripper.getInstance());
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Elevator.getInstance());
-    this.extension = extension;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    Elevator.getInstance().setSetPointLinear(extension);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(Gripper.getInstance().hasGamePiece()){
+      Gripper.getInstance().runCurrent(5);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Elevator.getInstance().setLinearSpeed(0);
+    Gripper.getInstance().runCurrent(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(extension - Elevator.getInstance().getExtension()) < Units.inchesToMeters(1)) && Elevator.getInstance().getExtensionRate() < .05; 
+    return false;
   }
 }
