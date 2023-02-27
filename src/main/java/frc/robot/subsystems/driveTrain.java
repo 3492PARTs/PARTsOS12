@@ -42,13 +42,13 @@ public class driveTrain extends beanieDriveTrain {
   // static CANSparkMax right1 = new CANSparkMax(24, MotorType.kBrushless);
   // static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
 
-  static CANSparkMax left1 = new CANSparkMax(9, MotorType.kBrushless);
-  static CANSparkMax left2 = new CANSparkMax(24, MotorType.kBrushless);
-  static CANSparkMax left3 = new CANSparkMax(25, MotorType.kBrushless);
+  //static CANSparkMax left1 = new CANSparkMax(18, MotorType.kBrushless);
+  static CANSparkMax left2 = new CANSparkMax(10, MotorType.kBrushless);
+  static CANSparkMax left3 = new CANSparkMax(23, MotorType.kBrushless);
 
-  static CANSparkMax right1 = new CANSparkMax(20, MotorType.kBrushless);
-  static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
-  static CANSparkMax right3 = new CANSparkMax(92, MotorType.kBrushless);
+  static CANSparkMax right1 = new CANSparkMax(24, MotorType.kBrushless);
+  //static CANSparkMax right2 = new CANSparkMax(7, MotorType.kBrushless);
+  static CANSparkMax right3 = new CANSparkMax(16, MotorType.kBrushless);
 
   DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics(Units.inchesToMeters(21.12)); // tbd
   DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(),
@@ -61,8 +61,14 @@ public class driveTrain extends beanieDriveTrain {
 
   /** Creates a new driveTrain. */
   public driveTrain() {
-    super(new AHRS(), new MotorControllerGroup(left1, left2, left3), new MotorControllerGroup(right1, right2, right3));
+    super(new AHRS(), new MotorControllerGroup(left2, left3), new MotorControllerGroup(right1, right3));
     Shuffleboard.getTab("primary").add(m_field);
+
+    left2.setClosedLoopRampRate(3);
+    left3.setClosedLoopRampRate(3);
+
+    right1.setClosedLoopRampRate(3);
+    right3.setClosedLoopRampRate(3);
 
   }
 
@@ -110,7 +116,7 @@ public class driveTrain extends beanieDriveTrain {
   @Override
   public double leftDistance() {
     // TODO Auto-generated method stub
-    return -Units.inchesToMeters((left1.getEncoder().getPosition() * 6 * Math.PI) / 8.01);
+    return -Units.inchesToMeters((left2.getEncoder().getPosition() * 6 * Math.PI) / 8.01);
   }
 
   public Supplier<Pose2d> getPoseSupplier() {
@@ -176,7 +182,7 @@ public class driveTrain extends beanieDriveTrain {
    * @return in rotations per second
    */
   public double getLeftVelocity() {
-    return -(left1.getEncoder().getVelocity() / 60);
+    return -(left2.getEncoder().getVelocity() / 60);
   }
 
   /**

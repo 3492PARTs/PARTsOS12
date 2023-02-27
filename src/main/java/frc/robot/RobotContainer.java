@@ -7,8 +7,15 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.controlLinear;
+import frc.robot.commands.controlPivot;
+import frc.robot.commands.linearController;
+import frc.robot.commands.pivotController;
+import frc.robot.commands.runGripper;
+import frc.robot.commands.zeroEncoder;
 import frc.robot.subsystems.ExampleSubsystem;
 import PARTSlib2023.PARTS.frc.Utils.Controls.beanieController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -22,14 +29,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  public static beanieController driveController = new beanieController(0);
+  public static CommandXboxController operatorController = new CommandXboxController(1);
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  public static beanieController dController = new beanieController(0);
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    Shuffleboard.getTab("debug").add(new zeroEncoder());
+
   }
 
   /**
@@ -45,6 +56,18 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+
+        
+    driveController.getY().whileTrue(new pivotController(.5));
+    driveController.getA().whileTrue(new pivotController(-.05));
+
+    operatorController.y().whileTrue(new linearController(.1));
+    operatorController.a().whileTrue(new linearController(-.1));
+
+    operatorController.rightTrigger(.4).whileTrue(new runGripper(1));
+    operatorController.leftTrigger(.4).whileTrue(new runGripper(-1));
+
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.

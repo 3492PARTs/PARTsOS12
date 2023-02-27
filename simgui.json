@@ -1,7 +1,10 @@
 {
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Debug/navX-Sensor[4]": "Gyro",
+      "/Shuffleboard/debug/zeroEncoder": "Command",
+      "/Shuffleboard/primary/Field": "Field2d"
     }
   },
   "NetworkTables": {

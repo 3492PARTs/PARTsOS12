@@ -88,14 +88,14 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    driveTrain.geDriveTrain().setDefaultCommand(new joystickDrive(driveTrain.getDriveTrainInstance(), RobotContainer.dController));
+    driveTrain.geDriveTrain().setDefaultCommand(new joystickDrive(driveTrain.getDriveTrainInstance(), RobotContainer.driveController));
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
 
-    cameraSystem.getCameraSystem().changeCamera(RobotContainer.dController);
+    cameraSystem.getCameraSystem().changeCamera(RobotContainer.driveController);
 
     
   }
@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    driveTrain.geDriveTrain().setDefaultCommand(new joystickDrive(driveTrain.geDriveTrain(), RobotContainer.dController));
+    driveTrain.geDriveTrain().setDefaultCommand(new joystickDrive(driveTrain.geDriveTrain(), RobotContainer.driveController));
   }
 
   /** This function is called periodically during test mode. */
