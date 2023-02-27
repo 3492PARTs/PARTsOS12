@@ -4,12 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Gripper.runGripper;
-import frc.robot.commands.elevator.controlLinear;
-import frc.robot.commands.elevator.controlPivot;
 import frc.robot.commands.elevator.linearController;
 import frc.robot.commands.elevator.pivotController;
 import frc.robot.commands.elevator.zeroEncoder;
