@@ -3,6 +3,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Debug/navX-Sensor[4]": "Gyro",
+      "/Shuffleboard/Debug/zeroEncoder": "Command",
       "/Shuffleboard/debug/zeroEncoder": "Command",
       "/Shuffleboard/primary/Field": "Field2d"
     }
