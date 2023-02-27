@@ -43,7 +43,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    Shuffleboard.getTab("debug").add(new zeroEncoder());
+    Shuffleboard.getTab(Constants.debugTab).add(new zeroEncoder());
 
   }
 
