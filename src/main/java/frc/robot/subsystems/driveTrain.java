@@ -64,11 +64,11 @@ public class driveTrain extends beanieDriveTrain {
     super(new AHRS(), new MotorControllerGroup(left2, left3), new MotorControllerGroup(right1, right3));
     Shuffleboard.getTab("primary").add(m_field);
 
-    left2.setClosedLoopRampRate(3);
-    left3.setClosedLoopRampRate(3);
+    left2.setOpenLoopRampRate(3);
+    left3.setOpenLoopRampRate(3);
 
-    right1.setClosedLoopRampRate(3);
-    right3.setClosedLoopRampRate(3);
+    right1.setOpenLoopRampRate(3);
+    right3.setOpenLoopRampRate(3);
 
   }
 
