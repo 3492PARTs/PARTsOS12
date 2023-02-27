@@ -15,10 +15,8 @@ import PARTSlib2023.PARTS.frc.Utils.Controls.beanieController;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.Pair;
@@ -27,10 +25,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class cameraSystem extends SubsystemBase {
