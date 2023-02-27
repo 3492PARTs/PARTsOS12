@@ -29,15 +29,13 @@ public class Elevator extends SubsystemBase {
   double kA;
 
   CANSparkMax pivotLeader;
-  CANSparkMax linearMotor;
-  SparkMaxPIDController pivot1Controller;
-  SparkMaxPIDController linear1Controller;
 
-  TalonSRX leftGripper;
-  TalonSRX rightGripper;
+
+  SparkMaxPIDController pivot1Controller;
+
 
   double pivotGearRatio = 32.0; //TODO: ask for gear ratio
-  double linearGearRatio = 4.0;
+
 
   double wheelCircumference;
 
@@ -48,20 +46,17 @@ public class Elevator extends SubsystemBase {
   // alongside the control loop for position. this should be a high priority to add.
   public Elevator() {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
-    linearMotor = new CANSparkMax(9, MotorType.kBrushless);
+
 
     pivotLeader.setSmartCurrentLimit(30);
     pivotLeader.setSecondaryCurrentLimit(30);
     pivot1Controller = pivotLeader.getPIDController();
-    linear1Controller = linearMotor.getPIDController();
 
-    linearMotor.setSmartCurrentLimit(15, 15);
 
-    linear1Controller = linearMotor.getPIDController();
 
     pivotLeader.setIdleMode(IdleMode.kBrake);
     pivotLeader.setInverted(true);
-    linearMotor.setIdleMode(IdleMode.kBrake);
+
 
     // pivot1Controller.setP(kP);
     // pivot1Controller.setI(kI);
@@ -79,8 +74,6 @@ public class Elevator extends SubsystemBase {
 
     Shuffleboard.getTab("debug").addNumber("arm angle", getAngleSupplier());
     Shuffleboard.getTab("debug").addNumber("arm angular velocity", getAnglularVelocitySupplier());
-    Shuffleboard.getTab("debug").addNumber("arm Linear Extension", getExtensionDistanceSupplier());
-    Shuffleboard.getTab("debug").addNumber("arm linear velocity", getExtensionRateSupplier());
 
   }
 
@@ -107,31 +100,12 @@ public class Elevator extends SubsystemBase {
     return s;
   }
 
-  public DoubleSupplier getExtensionDistanceSupplier() {
-    DoubleSupplier s = () -> getExtension();
-    return s;
-  }
-
-  public DoubleSupplier getExtensionRateSupplier() {
-    DoubleSupplier s = () -> getExtensionRate();
-    return s;
-  }
-
-  public double getExtension() {
-    return wheelCircumference * (linearMotor.getEncoder().getPosition() / linearGearRatio);
-  }
-
-  public double getExtensionRate() {
-    return wheelCircumference * (linearMotor.getEncoder().getVelocity() / linearGearRatio);
-  }
 
   public void setPivotSpeed(double speed) {
     pivotLeader.set(speed);
   }
 
-  public void setLinearSpeed(double speed) {
-    linearMotor.set(speed);
-  }
+
 
   public void zeroPivotEncoder() {
     pivotLeader.getEncoder().setPosition(0);
@@ -145,9 +119,7 @@ public class Elevator extends SubsystemBase {
     pivot1Controller.setReference(position * pivotGearRatio, ControlType.kPosition);
   }
 
-  public void setSetPointLinear(double extensionMeters) {
-    linear1Controller.setReference(extensionMeters * linearGearRatio, ControlType.kPosition);
-  }
+
 
   @Override
   public void periodic() {
