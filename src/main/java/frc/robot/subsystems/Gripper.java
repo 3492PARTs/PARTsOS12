@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.holdGripper;
 
 public class Gripper extends SubsystemBase {
   private TalonSRX leftGripper;
@@ -27,6 +28,8 @@ public class Gripper extends SubsystemBase {
 
     Shuffleboard.getTab(Constants.debugTab).add("leftGripperCurrent", gripperLeftCurrentSupplier());
     Shuffleboard.getTab(Constants.debugTab).add("rightGripperCurrent", gripperRightCurrentSupplier());
+    
+    setDefaultCommand(new holdGripper());
 
   }
 
@@ -55,6 +58,11 @@ public class Gripper extends SubsystemBase {
   public DoubleSupplier gripperRightCurrentSupplier() {
     DoubleSupplier s = () -> rightGripper.getStatorCurrent();
     return s;
+  }
+
+  public void runCurrent(double current){
+    leftGripper.set(ControlMode.Current, current);
+    rightGripper.set(ControlMode.Current, current);
   }
 
   @Override

@@ -5,38 +5,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gripper;
 
-public class runGripper extends CommandBase {
-  /** Creates a new runGripper. */
-  double direction;
-
-  public runGripper(double direction) {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class holdGripper extends CommandBase {
+  /** Creates a new holdGripper. */
+  public holdGripper() {
     addRequirements(Gripper.getInstance());
-    this.direction = direction;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(direction < 0){
-      Gripper.getInstance().setGamePiece(false);
+    if(Gripper.getInstance().hasGamePiece()){
+      Gripper.getInstance().runCurrent(5);
     }
-    Gripper.getInstance().runGripper(1 * direction);
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Gripper.getInstance().runGripper(0);
+    Gripper.getInstance().runCurrent(0);
   }
 
   // Returns true when the command should end.
