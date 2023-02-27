@@ -30,33 +30,29 @@ public class Elevator extends SubsystemBase {
 
   CANSparkMax pivotLeader;
 
-
   SparkMaxPIDController pivot1Controller;
 
-
-  double pivotGearRatio = 32.0; //TODO: ask for gear ratio
-
+  double pivotGearRatio = 32.0; // TODO: ask for gear ratio
 
   double wheelCircumference;
 
   private static Elevator m_elevator = new Elevator();
 
   /** Creates a new Elevator. */
-  //TODO: we need to add the ability for the arm to hold its position with a pid loop, by using the second pid slot on the Spark Maxes we can have a velocity control loop
-  // alongside the control loop for position. this should be a high priority to add.
+  // TODO: we need to add the ability for the arm to hold its position with a pid
+  // loop, by using the second pid slot on the Spark Maxes we can have a velocity
+  // control loop
+  // alongside the control loop for position. this should be a high priority to
+  // add.
   public Elevator() {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
-
 
     pivotLeader.setSmartCurrentLimit(30);
     pivotLeader.setSecondaryCurrentLimit(30);
     pivot1Controller = pivotLeader.getPIDController();
 
-
-
     pivotLeader.setIdleMode(IdleMode.kBrake);
     pivotLeader.setInverted(true);
-
 
     // pivot1Controller.setP(kP);
     // pivot1Controller.setI(kI);
@@ -100,12 +96,9 @@ public class Elevator extends SubsystemBase {
     return s;
   }
 
-
   public void setPivotSpeed(double speed) {
     pivotLeader.set(speed);
   }
-
-
 
   public void zeroPivotEncoder() {
     pivotLeader.getEncoder().setPosition(0);
@@ -118,8 +111,6 @@ public class Elevator extends SubsystemBase {
   public void setSetPointPivot(double position) {
     pivot1Controller.setReference(position * pivotGearRatio, ControlType.kPosition);
   }
-
-
 
   @Override
   public void periodic() {
