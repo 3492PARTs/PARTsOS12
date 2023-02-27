@@ -16,5 +16,12 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static enum elevatorState {
+    home,
+    level1,
+    level2,
+    shelf
+  }
   public static String debugTab = "Debug"; 
 }

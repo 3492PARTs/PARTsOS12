@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.HashMap;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -16,12 +17,16 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.elevatorState;
 
 public class Elevator extends SubsystemBase {
+  // angle, distance extended
+  public static HashMap<elevatorState, Double> elevatorStateMap;
 
   double kS;
   double kG;

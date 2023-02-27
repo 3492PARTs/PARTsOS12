@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.HashMap;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
@@ -14,12 +15,15 @@ import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.elevatorState;
 
 public class linearExtender extends SubsystemBase {
   double linearGearRatio = 4.0;
   CANSparkMax linearMotor;
   SparkMaxPIDController linear1Controller;
   double wheelCircumference = 1;
+  // state , extension distance
+  public static HashMap<elevatorState, Double> extenderStateMap;
 
   static linearExtender extender = new linearExtender();
   /** Creates a new linearExtender. */
