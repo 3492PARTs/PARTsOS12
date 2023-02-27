@@ -44,6 +44,8 @@ public class Elevator extends SubsystemBase {
   private static Elevator m_elevator = new Elevator();
 
   /** Creates a new Elevator. */
+  //TODO: we need to add the ability for the arm to hold its position with a pid loop, by using the second pid slot on the Spark Maxes we can have a velocity control loop
+  // alongside the control loop for position. this should be a high priority to add.
   public Elevator() {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
     linearMotor = new CANSparkMax(9, MotorType.kBrushless);
