@@ -26,10 +26,10 @@ public class Gripper extends SubsystemBase {
     leftGripper = new TalonSRX(13);
     rightGripper = new TalonSRX(29);
 
-    Shuffleboard.getTab(Constants.debugTab).add("leftGripperCurrent", gripperLeftCurrentSupplier());
-    Shuffleboard.getTab(Constants.debugTab).add("rightGripperCurrent", gripperRightCurrentSupplier());
+    Shuffleboard.getTab(Constants.debugTab).addNumber("leftGripperCurrent", gripperLeftCurrentSupplier());
+    Shuffleboard.getTab(Constants.debugTab).addNumber("rightGripperCurrent", gripperRightCurrentSupplier());
     
-    setDefaultCommand(new holdGripper());
+
 
   }
 

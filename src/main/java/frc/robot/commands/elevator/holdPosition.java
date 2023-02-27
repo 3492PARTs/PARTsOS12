@@ -16,8 +16,7 @@ public class holdPosition extends CommandBase {
   public holdPosition() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Elevator.getInstance());
-    velocityHolder = new PIDController(0, 0, 0);
-    velocityHolder.setSetpoint(0);
+    velocityHolder = Elevator.getInstance().getPivotHolderController();
   }
 
   // Called when the command is initially scheduled.

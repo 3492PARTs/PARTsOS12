@@ -19,9 +19,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.elevatorState;
 
 public class Elevator extends SubsystemBase {
@@ -32,6 +34,8 @@ public class Elevator extends SubsystemBase {
   double kG;
   double kV;
   double kA;
+
+  PIDController velocityHolder = new PIDController(0, 0, 0);
 
   CANSparkMax pivotLeader;
 
@@ -50,6 +54,8 @@ public class Elevator extends SubsystemBase {
   // alongside the control loop for position. this should be a high priority to
   // add.
   public Elevator() {
+
+    System.out.println("made elevator");
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
 
     pivotLeader.setSmartCurrentLimit(30);
@@ -58,6 +64,9 @@ public class Elevator extends SubsystemBase {
 
     pivotLeader.setIdleMode(IdleMode.kBrake);
     pivotLeader.setInverted(true);
+
+    velocityHolder.setSetpoint(0);
+
 
     // pivot1Controller.setP(kP);
     // pivot1Controller.setI(kI);
@@ -73,8 +82,9 @@ public class Elevator extends SubsystemBase {
     // linear1Controller.setFF(kFF);
     // linear1Controller.setOutputRange(-.1, .08);
 
-    Shuffleboard.getTab("debug").addNumber("arm angle", getAngleSupplier());
-    Shuffleboard.getTab("debug").addNumber("arm angular velocity", getAnglularVelocitySupplier());
+    Shuffleboard.getTab(Constants.debugTab).addNumber("arm angle", getAngleSupplier());
+    Shuffleboard.getTab(Constants.debugTab).addNumber("arm angular velocity", getAnglularVelocitySupplier());
+    Shuffleboard.getTab(Constants.debugTab).add(velocityHolder);
 
   }
 
@@ -107,6 +117,10 @@ public class Elevator extends SubsystemBase {
 
   public void zeroPivotEncoder() {
     pivotLeader.getEncoder().setPosition(0);
+  }
+
+  public PIDController getPivotHolderController(){
+    return velocityHolder;
   }
 
   /**
