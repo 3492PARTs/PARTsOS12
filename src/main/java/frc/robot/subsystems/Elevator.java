@@ -20,7 +20,7 @@ import frc.robot.Constants.elevatorState;
 
 public class Elevator extends SubsystemBase {
   // angle, distance extended
-  public static HashMap<elevatorState, Double> elevatorStateMap;
+  public static HashMap<elevatorState, Double> elevatorStateMap = new HashMap<elevatorState, Double>();
   
 
   double kS;
@@ -82,7 +82,6 @@ public class Elevator extends SubsystemBase {
 
     Shuffleboard.getTab(Constants.debugTab).addNumber("arm angle", getAngleSupplier());
     Shuffleboard.getTab(Constants.debugTab).addNumber("arm angular velocity", getAnglularVelocitySupplier());
-    Shuffleboard.getTab(Constants.debugTab).add(velocityHolder);
 
   }
 

@@ -11,6 +11,7 @@ import frc.robot.commands.elevator.pivotController;
 import frc.robot.commands.elevator.zeroLinearSlider;
 import frc.robot.commands.pivot.linearController;
 import frc.robot.commands.pivot.zeroPivotEncoder;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import PARTSlib2023.PARTS.frc.Utils.Controls.beanieController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -43,6 +44,8 @@ public class RobotContainer {
 
     Shuffleboard.getTab(Constants.debugTab).add(new zeroPivotEncoder());
     Shuffleboard.getTab(Constants.debugTab).add(new zeroLinearSlider());
+    Shuffleboard.getTab(Constants.debugTab).add(Elevator.getInstance().getPivotHolderController());
+
 
   }
 
