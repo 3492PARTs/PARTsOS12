@@ -5,11 +5,11 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.linearExtender;
 
-public class zeroEncoder extends CommandBase {
-  /** Creates a new zeroEncoder. */
-  public zeroEncoder() {
+public class zeroLinearSlider extends CommandBase {
+  /** Creates a new zeroLinearSlider. */
+  public zeroLinearSlider() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,7 +24,7 @@ public class zeroEncoder extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Elevator.getInstance().zeroPivotEncoder();
+    linearExtender.getInstance().zeroEncoder();
   }
 
   // Returns true when the command should end.

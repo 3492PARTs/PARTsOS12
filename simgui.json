@@ -4,6 +4,8 @@
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Debug/navX-Sensor[4]": "Gyro",
       "/Shuffleboard/Debug/zeroEncoder": "Command",
+      "/Shuffleboard/Debug/zeroLinearSlider": "Command",
+      "/Shuffleboard/Debug/zeroPivotEncoder": "Command",
       "/Shuffleboard/debug/zeroEncoder": "Command",
       "/Shuffleboard/primary/Field": "Field2d"
     }

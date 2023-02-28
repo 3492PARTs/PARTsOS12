@@ -86,7 +86,7 @@ public class linearExtender extends SubsystemBase {
     this.state = elevatorState.values()[state.getState()-1];
   }
   
-  public void zeroPivotEncoder() {
+  public void zeroEncoder() {
     linearMotor.getEncoder().setPosition(0);
   }
 
