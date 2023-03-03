@@ -52,9 +52,9 @@ public class driveTrain extends beanieDriveTrain {
   DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(),
       leftDistance(), rightDistance(), new Pose2d(1.0, 3.0, getRotation()));
   private static driveTrain mDriveTrain = new driveTrain();
-  private static double kv = 1.055;
-  private static double ka = .27947;
-  private static double ks = .2432;
+  private static double kv = 1.0051;
+  private static double ka = .27947; // this is from old robot new one had low r squared but its 0.084872
+  private static double ks = .20063;
   public static HashMap<String, Command> eventMap = new HashMap<>();
 
   /** Creates a new driveTrain. */
@@ -62,11 +62,13 @@ public class driveTrain extends beanieDriveTrain {
     super(new AHRS(), new MotorControllerGroup(left2, left3), new MotorControllerGroup(right1, right3));
     Shuffleboard.getTab("primary").add(m_field);
 
-    left2.setOpenLoopRampRate(3);
-    left3.setOpenLoopRampRate(3);
+    left1.setOpenLoopRampRate(2);
+    left2.setOpenLoopRampRate(2);
+    left3.setOpenLoopRampRate(2);
 
-    right1.setOpenLoopRampRate(3);
-    right3.setOpenLoopRampRate(3);
+    right1.setOpenLoopRampRate(2);
+    right2.setOpenLoopRampRate(2);
+    right3.setOpenLoopRampRate(2);
 
   }
 
@@ -139,8 +141,7 @@ public class driveTrain extends beanieDriveTrain {
   public void periodic() {
     // This method will be called once per scheduler run
     dEstimator.update(getRotation(), leftDistance(), rightDistance());
-    System.out.println(dEstimator.getEstimatedPosition().getX());
-    System.out.println(dEstimator.getEstimatedPosition().getY());
+
 
     StringBuilder sBuilder = new StringBuilder();
 
@@ -219,6 +220,7 @@ public class driveTrain extends beanieDriveTrain {
                                       // use feedforwards.
         new PIDController(.06, 0, 0),
         driveTrain.geDriveTrain().getBiConsumer(),
+        true,
         this);
 
     return controller1; // TODO: should probably add the subsystem as a requirement to this command.
