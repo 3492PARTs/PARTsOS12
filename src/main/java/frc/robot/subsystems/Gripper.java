@@ -16,6 +16,7 @@ import frc.robot.commands.Gripper.holdGripper;
 
 public class Gripper extends SubsystemBase {
   private TalonSRX leftGripper;
+  private TalonSRX BottomGripper;
   private TalonSRX rightGripper;
   private static Gripper gripper = new Gripper();
   private boolean hasGamePiece = true;
@@ -25,6 +26,7 @@ public class Gripper extends SubsystemBase {
 
     leftGripper = new TalonSRX(13);
     rightGripper = new TalonSRX(29);
+    BottomGripper = new TalonSRX(27);
 
     Shuffleboard.getTab(Constants.debugTab).addNumber("leftGripperCurrent", gripperLeftCurrentSupplier());
     Shuffleboard.getTab(Constants.debugTab).addNumber("rightGripperCurrent", gripperRightCurrentSupplier());
@@ -46,8 +48,9 @@ public class Gripper extends SubsystemBase {
   }
 
   public void runGripper(double speed) {
-    leftGripper.set(ControlMode.PercentOutput, speed);
-    rightGripper.set(ControlMode.PercentOutput, speed);
+    leftGripper.set(ControlMode.PercentOutput, -speed);
+    rightGripper.set(ControlMode.PercentOutput, -speed);
+    //BottomGripper.set(ControlMode.PercentOutput, speed);
   }
 
   public DoubleSupplier gripperLeftCurrentSupplier() {
@@ -63,6 +66,7 @@ public class Gripper extends SubsystemBase {
   public void runCurrent(double current){
     leftGripper.set(ControlMode.Current, current);
     rightGripper.set(ControlMode.Current, current);
+    BottomGripper.set(ControlMode.Current, current);
   }
 
   @Override

@@ -12,8 +12,14 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.angleTurn;
-import frc.robot.commands.autoLevel;
+import frc.robot.commands.Drivetrain.autoLevel;
+import frc.robot.commands.Drivetrain.autoLevelNoPID;
+import frc.robot.commands.Gripper.runElevatorTeleop;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.cameraSystem;
 import frc.robot.subsystems.driveTrain;
@@ -41,6 +47,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     NetworkTableInstance.getDefault().getEntry("/CameraPublisher/FishEyes/streams").setStringArray(new String[]{"mjpg:http://10.34.92.2:8008/?action=stream"});
+    driveTrain.geDriveTrain().calibrateGyro();
 
   }
 
@@ -77,13 +84,19 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
 
-    //new PIDTurn(driveTrain.getDriveTrainInstance(), new PIDValues(.006, 0.0, 0.0), 90).schedule();;
-    new PIDDrive(driveTrain.getDriveTrainInstance(), new PIDValues(49.94, 0, 2.775));
+    // new autoLevelNoPID().schedule();
+
+    //new PIDTurn(driveTrain.getDriveTrainInstance(), new PIDValues(0.044301, 0.0, 0.0053172), 90).schedule();;
+    //new PIDDrive(driveTrain.getDriveTrainInstance(), new PIDValues(49.94, 0, 2.775));
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    
+
+  }
 
   @Override
   public void teleopInit() {
@@ -94,6 +107,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    Elevator.getInstance().setDefaultCommand(new runElevatorTeleop(RobotContainer.operatorController));
 
     driveTrain.geDriveTrain().setDefaultCommand(new joystickDrive(driveTrain.getDriveTrainInstance(), RobotContainer.driveController));
   }

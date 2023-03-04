@@ -14,6 +14,7 @@ import org.photonvision.RobotPoseEstimator.PoseStrategy;
 import PARTSlib2023.PARTS.frc.Utils.Controls.beanieController;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
@@ -25,7 +26,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class cameraSystem extends SubsystemBase {
@@ -110,6 +113,12 @@ public class cameraSystem extends SubsystemBase {
 
   public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
     robotPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+    if(DriverStation.getAlliance() == Alliance.Red){
+      aprilTagFieldLayout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
+    }
+    else if(DriverStation.getAlliance() == Alliance.Blue){
+      aprilTagFieldLayout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+    }
 
     double currentTime = Timer.getFPGATimestamp();
     Optional<Pair<Pose3d, Double>> result = robotPoseEstimator.update();

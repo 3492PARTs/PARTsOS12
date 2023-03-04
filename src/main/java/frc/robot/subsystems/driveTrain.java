@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 import java.util.function.BiConsumer;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -30,6 +31,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 
 public class driveTrain extends beanieDriveTrain {
 
@@ -49,7 +51,7 @@ public class driveTrain extends beanieDriveTrain {
   static CANSparkMax right2 = new CANSparkMax(7, MotorType.kBrushless);
   static CANSparkMax right3 = new CANSparkMax(16, MotorType.kBrushless);
 
-  DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics(Units.inchesToMeters(21.12)); // tbd
+  DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics(1.421); // tbd
   DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(),
       leftDistance(), rightDistance(), new Pose2d(1.0, 3.0, getRotation()));
   private static driveTrain mDriveTrain = new driveTrain();
@@ -60,7 +62,7 @@ public class driveTrain extends beanieDriveTrain {
 
   /** Creates a new driveTrain. */
   public driveTrain() {
-    super(new AHRS(), new MotorControllerGroup(left2, left3), new MotorControllerGroup(right1, right3));
+    super(new AHRS(), new MotorControllerGroup(left1,left2, left3), new MotorControllerGroup(right1,right2, right3));
     Shuffleboard.getTab("primary").add(m_field);
 
     left1.setOpenLoopRampRate(2);
@@ -78,6 +80,9 @@ public class driveTrain extends beanieDriveTrain {
     right1.setIdleMode(IdleMode.kBrake);
     right2.setIdleMode(IdleMode.kBrake);
     right3.setIdleMode(IdleMode.kBrake);
+
+    Shuffleboard.getTab(Constants.debugTab).addNumber("leftDistance", leftDistanceDoubleSupplier());
+    Shuffleboard.getTab(Constants.debugTab).addNumber("rightDistance", rightDistanceDoubleSupplier());
 
   }
 
@@ -105,7 +110,7 @@ public class driveTrain extends beanieDriveTrain {
   public double rightDistance() {
     // TODO Auto-generated method stub
 
-    return Units.inchesToMeters((right1.getEncoder().getPosition() * 6 * Math.PI) / 8.01);
+    return -Units.inchesToMeters((right1.getEncoder().getPosition() * 6 * Math.PI) / 8.01);
   }
 
   private double wheelAverage(wheelLinearDistance[] wheelDistances) {
@@ -125,7 +130,17 @@ public class driveTrain extends beanieDriveTrain {
   @Override
   public double leftDistance() {
     // TODO Auto-generated method stub
-    return -Units.inchesToMeters((left2.getEncoder().getPosition() * 6 * Math.PI) / 8.01);
+    return Units.inchesToMeters((left2.getEncoder().getPosition() * 6 * Math.PI) / 8.01);
+  }
+
+  public DoubleSupplier leftDistanceDoubleSupplier(){
+    DoubleSupplier s = () -> leftDistance();
+    return s;
+  }
+
+  public DoubleSupplier rightDistanceDoubleSupplier(){
+    DoubleSupplier s = () -> rightDistance();
+    return s;
   }
 
   public Supplier<Pose2d> getPoseSupplier() {
@@ -190,7 +205,7 @@ public class driveTrain extends beanieDriveTrain {
    * @return in rotations per second
    */
   public double getLeftVelocity() {
-    return -(left2.getEncoder().getVelocity() / 60);
+    return (left2.getEncoder().getVelocity() / 60);
   }
 
   /**
@@ -198,7 +213,7 @@ public class driveTrain extends beanieDriveTrain {
    * @return in rotations per second
    */
   public double getRightVelocity() {
-    return right1.getEncoder().getVelocity() / 60;
+    return -right1.getEncoder().getVelocity() / 60;
   }
 
   /**
