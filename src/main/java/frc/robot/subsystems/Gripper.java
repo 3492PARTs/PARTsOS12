@@ -51,12 +51,12 @@ public class Gripper extends SubsystemBase {
   }
 
   public DoubleSupplier gripperLeftCurrentSupplier() {
-    DoubleSupplier s = () -> leftGripper.getStatorCurrent();
+    DoubleSupplier s = () -> leftGripper.getSupplyCurrent();
     return s;
   }
 
   public DoubleSupplier gripperRightCurrentSupplier() {
-    DoubleSupplier s = () -> rightGripper.getStatorCurrent();
+    DoubleSupplier s = () -> rightGripper.getSupplyCurrent();
     return s;
   }
 

@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
@@ -69,6 +70,14 @@ public class driveTrain extends beanieDriveTrain {
     right1.setOpenLoopRampRate(2);
     right2.setOpenLoopRampRate(2);
     right3.setOpenLoopRampRate(2);
+
+    left1.setIdleMode(IdleMode.kBrake);
+    left2.setIdleMode(IdleMode.kBrake);
+    left3.setIdleMode(IdleMode.kBrake);
+
+    right1.setIdleMode(IdleMode.kBrake);
+    right2.setIdleMode(IdleMode.kBrake);
+    right3.setIdleMode(IdleMode.kBrake);
 
   }
 
