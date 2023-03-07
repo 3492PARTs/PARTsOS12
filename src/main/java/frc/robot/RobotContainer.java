@@ -70,7 +70,7 @@ public class RobotContainer {
     operatorController.a().whileTrue(new linearController(.1));
 
     operatorController.rightTrigger(.4).whileTrue(new runGripper(.5));
-    operatorController.leftTrigger(.4).whileTrue(new runGripper(-.5));
+    operatorController.leftTrigger(.4).whileTrue(new runGripper(-1));
 
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
@@ -84,6 +84,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return driveTrain.getDriveTrainInstance().followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(1 ,.5)), true);
+    return driveTrain.getDriveTrainInstance().followTrajectoryCommand(PathPlanner.loadPath("New New New New Path", new PathConstraints(1 ,.5)), true);
   }
 }

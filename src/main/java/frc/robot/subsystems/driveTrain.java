@@ -180,9 +180,7 @@ public class driveTrain extends beanieDriveTrain {
 
   public BiConsumer<Double, Double> getBiConsumer() {
     BiConsumer<Double, Double> biC = (leftVoltage, rightVoltage) -> {
-      leftControllerGroup.setVoltage(-leftVoltage);
-      rightControllerGroup.setVoltage(rightVoltage);
-      super.mDrive.feed();
+      moveVolts(leftVoltage, rightVoltage);//this used to invert the left side
     };
     return biC;
   }

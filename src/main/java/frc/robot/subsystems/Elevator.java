@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -31,9 +32,13 @@ public class Elevator extends SubsystemBase {
   TalonSRX rightGripper;
 
   double pivotGearRatio = 32.0; //TODO: ask for gear ratio
-  double linearGearRatio = 4.0;
+  double linearGearRatio = 16.0;
+
+  double pivotMountAngle = 73; // or 73 or 60
 
   double wheelCircumference;
+
+  ArmFeedforward armholdFeedforward;
 
   private static Elevator m_elevator = new Elevator();
 
@@ -44,6 +49,9 @@ public class Elevator extends SubsystemBase {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
     linearMotor = new CANSparkMax(9, MotorType.kBrushless);
 
+    armholdFeedforward = new ArmFeedforward(0.22166, 0.80547, 0.01124);
+
+    
     pivotLeader.setSmartCurrentLimit(30);
     pivotLeader.setSecondaryCurrentLimit(30);
     pivot1Controller = pivotLeader.getPIDController();
@@ -94,6 +102,15 @@ public class Elevator extends SubsystemBase {
   public DoubleSupplier getAngleSupplier() {
     DoubleSupplier s = () -> getAngle();
     return s;
+  }
+
+  public double calcHoldingVoltage(){
+    double output = armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 93), 0);
+    return output;
+  }
+
+  public void driveMotorVolts(double volts){
+    pivotLeader.setVoltage(volts);
   }
 
   public DoubleSupplier getAnglularVelocitySupplier() {

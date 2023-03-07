@@ -25,12 +25,12 @@ public class runElevatorTeleop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println(Elevator.getInstance().calcHoldingVoltage());
     if(Math.abs(opCommandXboxController.getLeftY()) > .1){
-      Elevator.getInstance().setPivotSpeed(-opCommandXboxController.getLeftY());;
+      Elevator.getInstance().setPivotSpeed(opCommandXboxController.getLeftY());
     }
-    else Elevator.getInstance().setPivotSpeed(0);
 
-    
+    else Elevator.getInstance().driveMotorVolts(Elevator.getInstance().calcHoldingVoltage());
   }
 
   // Called once the command ends or is interrupted.
