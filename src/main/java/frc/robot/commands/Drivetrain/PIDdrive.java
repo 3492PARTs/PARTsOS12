@@ -5,7 +5,7 @@ import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
 import PARTSlib2023.PARTS.frc.Utils.dataHolders.PIDValues;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.driveTrain;
 
@@ -27,7 +27,7 @@ public class PIDdrive extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.driveTrain = driveTrain;
-    this.pidValues = drivingValues.getPIDValues();
+    this.pidValues = new PIDValues(.4, 0, 0).getPIDValues();
     this.setPoint = distance;
     PIDController = new PIDController(pidValues[0], pidValues[1], pidValues[2]);
     addRequirements(driveTrain);
@@ -36,7 +36,7 @@ public class PIDdrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    init = (driveTrain.getInstance().leftDistance() + driveTrain.getInstance().rightDistance()) /2;
+    init = (Units.metersToInches(driveTrain.getInstance().leftDistance() + driveTrain.getInstance().rightDistance()) /2);
     PIDController.setSetpoint(setPoint);
     
 
@@ -45,11 +45,11 @@ public class PIDdrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = PIDController.calculate(((driveTrain.getInstance().leftDistance() + driveTrain.getInstance().rightDistance()) /2) - init);
+    double speed = PIDController.calculate(((Units.metersToInches(driveTrain.getInstance().leftDistance() + driveTrain.getInstance().rightDistance()) /2)) - init);
 
-    speed = MathUtil.clamp(speed, -12, 12);
+    speed = MathUtil.clamp(speed, -.5, .5);
 
-    driveTrain.moveVolts(speed, speed);
+    driveTrain.move(speed, speed);
 
   }
 
