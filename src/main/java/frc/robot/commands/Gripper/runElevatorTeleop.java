@@ -27,7 +27,7 @@ public class runElevatorTeleop extends CommandBase {
   public void execute() {
     System.out.println(Elevator.getInstance().calcHoldingVoltage());
     if(Math.abs(opCommandXboxController.getLeftY()) > .1){
-      Elevator.getInstance().setPivotSpeed(opCommandXboxController.getLeftY());
+      Elevator.getInstance().setPivotSpeed(-.5 * opCommandXboxController.getLeftY());
     }
 
     else Elevator.getInstance().driveMotorVolts(Elevator.getInstance().calcHoldingVoltage());

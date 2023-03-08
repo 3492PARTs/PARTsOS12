@@ -49,7 +49,7 @@ public class Elevator extends SubsystemBase {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
     linearMotor = new CANSparkMax(9, MotorType.kBrushless);
 
-    armholdFeedforward = new ArmFeedforward(0.22166, 0.80547, 0.01124);
+    armholdFeedforward = new ArmFeedforward(0.0081992, 0.31122, 0.012932);
 
     
     pivotLeader.setSmartCurrentLimit(30);
@@ -105,7 +105,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double calcHoldingVoltage(){
-    double output = armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 93), 0);
+    double output = armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 95.735), 0);
     return output;
   }
 
