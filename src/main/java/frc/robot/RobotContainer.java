@@ -89,6 +89,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return driveTrain.getDriveTrainInstance().followTrajectoryCommand(PathPlanner.loadPath("New New New New Path", new PathConstraints(1 ,.5)), true);
+    //return driveTrain.getDriveTrainInstance().followTrajectoryCommand(PathPlanner.loadPath("New New New New Path", new PathConstraints(1 ,.5)), true);
+    return new pivotTrapezoid(30);
   }
 }
