@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,46 +25,38 @@ public class Elevator extends SubsystemBase {
   double kA;
 
   CANSparkMax pivotLeader;
-  CANSparkMax linearMotor;
   SparkMaxPIDController pivot1Controller;
-  SparkMaxPIDController linear1Controller;
 
-  TalonSRX leftGripper;
-  TalonSRX rightGripper;
-
-  double pivotGearRatio = 32.0; //TODO: ask for gear ratio
-  double linearGearRatio = 16.0;
+  double pivotGearRatio = 32.0; // TODO: ask for gear ratio
 
   double pivotMountAngle = 73; // or 73 or 60
 
   double wheelCircumference;
 
   ArmFeedforward armholdFeedforward;
-
+  TrapezoidProfile.Constraints ElevatorConstraints;
+  TrapezoidProfile.State stateToBeExecuted = new TrapezoidProfile.State(0, 0);
   private static Elevator m_elevator = new Elevator();
 
   /** Creates a new Elevator. */
-  //TODO: we need to add the ability for the arm to hold its position with a pid loop, by using the second pid slot on the Spark Maxes we can have a velocity control loop
-  // alongside the control loop for position. this should be a high priority to add.
+  // TODO: we need to add the ability for the arm to hold its position with a pid
+  // loop, by using the second pid slot on the Spark Maxes we can have a velocity
+  // control loop
+  // alongside the control loop for position. this should be a high priority to
+  // add.
   public Elevator() {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
-    linearMotor = new CANSparkMax(9, MotorType.kBrushless);
+    ElevatorConstraints = new TrapezoidProfile.Constraints(Math.toRadians(30), Math.toRadians(10));// degrees and
+                                                                                                   // degrees/s
 
     armholdFeedforward = new ArmFeedforward(0.0081992, 0.31122, 0.012932);
 
-    
     pivotLeader.setSmartCurrentLimit(30);
     pivotLeader.setSecondaryCurrentLimit(30);
     pivot1Controller = pivotLeader.getPIDController();
-    linear1Controller = linearMotor.getPIDController();
-
-    linearMotor.setSmartCurrentLimit(15, 15);
-
-    linear1Controller = linearMotor.getPIDController();
 
     pivotLeader.setIdleMode(IdleMode.kBrake);
     pivotLeader.setInverted(true);
-    linearMotor.setIdleMode(IdleMode.kBrake);
 
     // pivot1Controller.setP(kP);
     // pivot1Controller.setI(kI);
@@ -81,8 +74,6 @@ public class Elevator extends SubsystemBase {
 
     Shuffleboard.getTab("debug").addNumber("arm angle", getAngleSupplier());
     Shuffleboard.getTab("debug").addNumber("arm angular velocity", getAnglularVelocitySupplier());
-    Shuffleboard.getTab("debug").addNumber("arm Linear Extension", getExtensionDistanceSupplier());
-    Shuffleboard.getTab("debug").addNumber("arm linear velocity", getExtensionRateSupplier());
 
   }
 
@@ -99,17 +90,38 @@ public class Elevator extends SubsystemBase {
 
   }
 
+  public TrapezoidProfile.Constraints getConstraints() {
+    return ElevatorConstraints;
+  }
+
+  public TrapezoidProfile.State getState() {
+    return new TrapezoidProfile.State(getAngle(), getAnglularVelocitySupplier().getAsDouble());
+  }
+
+  public void setGoalState(TrapezoidProfile.State goalState) {
+    this.stateToBeExecuted = goalState;
+  }
+
+  public TrapezoidProfile.State getGoalState() {
+    return stateToBeExecuted;
+  }
+
   public DoubleSupplier getAngleSupplier() {
     DoubleSupplier s = () -> getAngle();
     return s;
   }
 
-  public double calcHoldingVoltage(){
+  public double calcHoldingVoltage() {
     double output = armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 95.735), 0);
     return output;
   }
 
-  public void driveMotorVolts(double volts){
+  public double calcOutputVoltage(double velocity) {
+    double output = armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 95.735), velocity);
+    return output;
+  }
+
+  public void driveMotorVolts(double volts) {
     pivotLeader.setVoltage(volts);
   }
 
@@ -118,30 +130,8 @@ public class Elevator extends SubsystemBase {
     return s;
   }
 
-  public DoubleSupplier getExtensionDistanceSupplier() {
-    DoubleSupplier s = () -> getExtension();
-    return s;
-  }
-
-  public DoubleSupplier getExtensionRateSupplier() {
-    DoubleSupplier s = () -> getExtensionRate();
-    return s;
-  }
-
-  public double getExtension() {
-    return wheelCircumference * (linearMotor.getEncoder().getPosition() / linearGearRatio);
-  }
-
-  public double getExtensionRate() {
-    return wheelCircumference * (linearMotor.getEncoder().getVelocity() / linearGearRatio);
-  }
-
   public void setPivotSpeed(double speed) {
     pivotLeader.set(speed);
-  }
-
-  public void setLinearSpeed(double speed) {
-    linearMotor.set(speed);
   }
 
   public void zeroPivotEncoder() {
@@ -154,10 +144,6 @@ public class Elevator extends SubsystemBase {
    */
   public void setSetPointPivot(double position) {
     pivot1Controller.setReference(position * pivotGearRatio, ControlType.kPosition);
-  }
-
-  public void setSetPointLinear(double extensionMeters) {
-    linear1Controller.setReference(extensionMeters * linearGearRatio, ControlType.kPosition);
   }
 
   @Override

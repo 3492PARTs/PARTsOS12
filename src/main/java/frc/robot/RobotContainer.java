@@ -8,9 +8,10 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Drivetrain.autoLevelNoPID;
 import frc.robot.commands.Gripper.runGripper;
-import frc.robot.commands.elevator.linearController;
 import frc.robot.commands.elevator.pivotController;
+import frc.robot.commands.elevator.pivotTrapezoid;
 import frc.robot.commands.elevator.zeroEncoder;
+import frc.robot.commands.extender.linearController;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.driveTrain;
 
@@ -71,6 +72,10 @@ public class RobotContainer {
 
     operatorController.rightTrigger(.4).whileTrue(new runGripper(.5));
     operatorController.leftTrigger(.4).whileTrue(new runGripper(-1));
+
+    operatorController.povUp().whileTrue(new pivotTrapezoid(30));
+
+    
 
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
