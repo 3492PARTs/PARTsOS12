@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,6 +37,7 @@ public class Elevator extends SubsystemBase {
   ArmFeedforward armholdFeedforward;
   TrapezoidProfile.Constraints ElevatorConstraints;
   TrapezoidProfile.State stateToBeExecuted = new TrapezoidProfile.State(0, 0);
+  PIDController velocityPID = new PIDController(1, 8, .001); 
   private static Elevator m_elevator = new Elevator();
 
   /** Creates a new Elevator. */
@@ -46,10 +48,11 @@ public class Elevator extends SubsystemBase {
   // add.
   public Elevator() {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
-    ElevatorConstraints = new TrapezoidProfile.Constraints(Math.toRadians(30), Math.toRadians(10));// degrees and
+    ElevatorConstraints = new TrapezoidProfile.Constraints(Math.toRadians(20), Math.toRadians(10));// degrees and
                                                                                                    // degrees/s
 
-    armholdFeedforward = new ArmFeedforward(0.0081992, 0.31122, 0.012932);
+    armholdFeedforward = new ArmFeedforward(0.039224, 0.31122, 0.012932);
+
 
     pivotLeader.setSmartCurrentLimit(30);
     pivotLeader.setSecondaryCurrentLimit(30);
@@ -95,7 +98,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public TrapezoidProfile.State getState() {
-    return new TrapezoidProfile.State(getAngle(), getAnglularVelocitySupplier().getAsDouble());
+    return new TrapezoidProfile.State(Math.toRadians(getAngle()), Math.toRadians(getAnglularVelocitySupplier().getAsDouble()));
   }
 
   public void setGoalState(TrapezoidProfile.State goalState) {
@@ -112,12 +115,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public double calcHoldingVoltage() {
-    double output = armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 95.735), 0);
+    double output = (armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 95.735), 0));
     return output;
   }
 
   public double calcOutputVoltage(double velocity) {
-    double output = armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 95.735), velocity);
+    double output = (armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 95.735), velocity) + velocityPID.calculate(Math.toRadians(getRotationRate()), velocity));
     return output;
   }
 

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Gripper;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,7 +30,7 @@ public class runElevatorTeleop extends CommandBase {
       Elevator.getInstance().setPivotSpeed(-.5 * opCommandXboxController.getLeftY());
     }
 
-    else Elevator.getInstance().driveMotorVolts(Elevator.getInstance().calcHoldingVoltage());
+    else Elevator.getInstance().driveMotorVolts(Elevator.getInstance().calcOutputVoltage(0));
   }
 
   // Called once the command ends or is interrupted.

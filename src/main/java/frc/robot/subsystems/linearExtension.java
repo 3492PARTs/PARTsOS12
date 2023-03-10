@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -29,22 +30,25 @@ public class linearExtension extends SubsystemBase {
 
   double linearGearRatio = 16.0;
 
-  double wheelCircumference = 1;
+  double wheelCircumference = Units.inchesToMeters(1.57 * Math.PI);
 
-  SimpleMotorFeedforward linearFeedforward;
+  SimpleMotorFeedforward linearFeedforward = new SimpleMotorFeedforward(0.062232, 8.7079,0.2064);
+  PIDController velocityPID = new PIDController(.18, 0, 0); 
   TrapezoidProfile.Constraints linearConstraints;
   TrapezoidProfile.State stateToBeExecuted = new TrapezoidProfile.State(0,0);
   private static linearExtension m_elevator = new linearExtension();
 
 
+
   public linearExtension() {
     linearMotor = new CANSparkMax(9, MotorType.kBrushless);
-    linearConstraints = new TrapezoidProfile.Constraints(Units.inchesToMeters(6),Units.inchesToMeters(3));// degrees and degrees/s
+    linearConstraints = new TrapezoidProfile.Constraints(Units.inchesToMeters(3),Units.inchesToMeters(2));// degrees and degrees/s
 
 
     
 
     linear1Controller = linearMotor.getPIDController();
+    linearMotor.setInverted(true);
 
     linearMotor.setSmartCurrentLimit(15, 15);
 
@@ -92,7 +96,7 @@ public class linearExtension extends SubsystemBase {
 
   
   public double calcOutputVoltage(double velocity) {
-    double output = linearFeedforward.calculate(velocity);
+    double output = linearFeedforward.calculate(velocity) + velocityPID.calculate(getExtensionRate(), velocity);
     return output;
   }
 

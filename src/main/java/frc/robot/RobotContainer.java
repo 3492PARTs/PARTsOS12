@@ -12,6 +12,7 @@ import frc.robot.commands.elevator.pivotController;
 import frc.robot.commands.elevator.pivotTrapezoid;
 import frc.robot.commands.elevator.zeroEncoder;
 import frc.robot.commands.extender.linearController;
+import frc.robot.commands.extender.linearTrapezoid;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.driveTrain;
 
@@ -70,6 +71,9 @@ public class RobotContainer {
     operatorController.y().whileTrue(new linearController(-.1));
     operatorController.a().whileTrue(new linearController(.1));
 
+    driveController.getA().whileTrue(new pivotTrapezoid(0));
+    driveController.getY().whileTrue(new pivotTrapezoid(30));
+
     operatorController.rightTrigger(.4).whileTrue(new runGripper(.5));
     operatorController.leftTrigger(.4).whileTrue(new runGripper(-1));
 
@@ -90,6 +94,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return driveTrain.getDriveTrainInstance().followTrajectoryCommand(PathPlanner.loadPath("New New New New Path", new PathConstraints(1 ,.5)), true);
-    return new pivotTrapezoid(30);
+    //return new pivotTrapezoid(40);
+    //return new linearTrapezoid(6);
+    return null;
   }
 }
