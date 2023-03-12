@@ -31,6 +31,7 @@ public class pivotTrapezoid extends TrapezoidProfileCommand {
             Elevator.getInstance().driveMotorVolts(output);
             System.out.println(Elevator.getInstance().getGoalState().velocity);
             System.out.println("pivoting like a trapezoid");
-        });
+        },
+        Elevator.getInstance());
   }
 }

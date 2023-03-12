@@ -14,6 +14,7 @@ public class linearController extends CommandBase {
   public linearController(double direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.direction = direction;
+    addRequirements(linearExtension.getInstance());
   }
 
   // Called when the command is initially scheduled.

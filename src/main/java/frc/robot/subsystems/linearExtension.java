@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -15,7 +18,10 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.MotorSafety;
+import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -32,8 +38,8 @@ public class linearExtension extends SubsystemBase {
 
   double wheelCircumference = Units.inchesToMeters(1.57 * Math.PI);
 
-  SimpleMotorFeedforward linearFeedforward = new SimpleMotorFeedforward(0.062232, 8.7079,0.2064);
-  PIDController velocityPID = new PIDController(.18, 0, 0); 
+  SimpleMotorFeedforward linearFeedforward = new SimpleMotorFeedforward(0.062877, 8.2899,0.19649);
+  PIDController velocityPID = new PIDController(0, 0, 0); 
   TrapezoidProfile.Constraints linearConstraints;
   TrapezoidProfile.State stateToBeExecuted = new TrapezoidProfile.State(0,0);
   private static linearExtension m_elevator = new linearExtension();
@@ -42,18 +48,22 @@ public class linearExtension extends SubsystemBase {
 
   public linearExtension() {
     linearMotor = new CANSparkMax(9, MotorType.kBrushless);
-    linearConstraints = new TrapezoidProfile.Constraints(Units.inchesToMeters(3),Units.inchesToMeters(2));// degrees and degrees/s
+    linearConstraints = new TrapezoidProfile.Constraints(Units.inchesToMeters(5),Units.inchesToMeters(2));// degrees and degrees/s
+
+    
 
 
     
 
     linear1Controller = linearMotor.getPIDController();
     linearMotor.setInverted(true);
+    linearMotor.setCANTimeout(250);
 
-    linearMotor.setSmartCurrentLimit(15, 15);
+    linearMotor.setSmartCurrentLimit(20, 20);
 
     linear1Controller = linearMotor.getPIDController();
-    linearMotor.setIdleMode(IdleMode.kBrake);
+
+    
 
     
 
@@ -106,12 +116,22 @@ public class linearExtension extends SubsystemBase {
   }
 
   public DoubleSupplier getExtensionDistanceSupplier() {
-    DoubleSupplier s = () -> Units.inchesToMeters(getExtension());
+    DoubleSupplier s = () -> (getExtension());
     return s;
   }
 
   public DoubleSupplier getExtensionRateSupplier() {
-    DoubleSupplier s = () -> Units.inchesToMeters(getExtensionRate());
+    DoubleSupplier s = () -> (getExtensionRate());
+    return s;
+  }
+
+  public Supplier<State> startingStateSupplier(){
+    Supplier<TrapezoidProfile.State> s = () -> getState();
+    return s;
+  }
+
+  public Consumer<State> stateConsumer(){
+    Consumer<State> s  = (stateToBeExecuted) -> setGoalState(stateToBeExecuted);
     return s;
   }
 
@@ -120,7 +140,7 @@ public class linearExtension extends SubsystemBase {
   }
 
   public double getExtensionRate() {
-    return wheelCircumference * (linearMotor.getEncoder().getVelocity() / linearGearRatio);
+    return wheelCircumference * (linearMotor.getEncoder().getVelocity() / linearGearRatio * 60);
   }
 
   public void setLinearSpeed(double speed) {

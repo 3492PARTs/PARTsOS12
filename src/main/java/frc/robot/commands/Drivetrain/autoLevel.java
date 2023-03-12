@@ -11,10 +11,11 @@ import frc.robot.subsystems.driveTrain;
 
 public class autoLevel extends CommandBase {
   /** Creates a new autoLevel. */
-  PIDController angController = new PIDController(.11/10, 0, .0030);
+  PIDController angController = new PIDController(.00625, 0.003, 0);
   public autoLevel() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain.getDriveTrainInstance());
+    angController.setIntegratorRange(-10, 10);
   }
 
   // Called when the command is initially scheduled.
@@ -42,6 +43,6 @@ public class autoLevel extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(driveTrain.getDriveTrainInstance().getPitch()) < 2) && Math.abs(driveTrain.getDriveTrainInstance().getRightVelocity()) < .05 && driveTrain.getDriveTrainInstance().getVelocityGyro() < .1;
+    return (Math.abs(driveTrain.getDriveTrainInstance().getPitch()) < 1) && Math.abs(driveTrain.getDriveTrainInstance().getRightVelocity()) < .05 && driveTrain.getDriveTrainInstance().getVelocityGyro() < .1;
   }
 }

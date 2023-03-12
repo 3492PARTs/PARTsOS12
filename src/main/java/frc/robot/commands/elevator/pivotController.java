@@ -14,6 +14,7 @@ public class pivotController extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.direction = direction;
+    addRequirements(Elevator.getInstance());
     
 
 

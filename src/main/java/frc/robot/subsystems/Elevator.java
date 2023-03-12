@@ -37,7 +37,7 @@ public class Elevator extends SubsystemBase {
   ArmFeedforward armholdFeedforward;
   TrapezoidProfile.Constraints ElevatorConstraints;
   TrapezoidProfile.State stateToBeExecuted = new TrapezoidProfile.State(0, 0);
-  PIDController velocityPID = new PIDController(1, 8, .001); 
+  PIDController velocityPID = new PIDController(1.05, 8, .001); 
   private static Elevator m_elevator = new Elevator();
 
   /** Creates a new Elevator. */
@@ -48,7 +48,7 @@ public class Elevator extends SubsystemBase {
   // add.
   public Elevator() {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
-    ElevatorConstraints = new TrapezoidProfile.Constraints(Math.toRadians(20), Math.toRadians(10));// degrees and
+    ElevatorConstraints = new TrapezoidProfile.Constraints(Math.toRadians(20), Math.toRadians(8));// degrees and
                                                                                                    // degrees/s
 
     armholdFeedforward = new ArmFeedforward(0.039224, 0.31122, 0.012932);
