@@ -18,8 +18,8 @@ public class raiseArmAndDrop extends SequentialCommandGroup {
   public raiseArmAndDrop() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new RunCommand(() -> Elevator.getInstance().setPivotSpeed(.1), Elevator.getInstance()).withTimeout(.1)
-    , new runGripper(-1).withTimeout(.2).andThen(new runGripper(0)).withTimeout(.02)
-    ,(new InstantCommand(() -> Elevator.getInstance().setPivotSpeed(0))));
+    addCommands(
+    new runGripper(-1).withTimeout(.5)
+    );
   }
 }

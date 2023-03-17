@@ -6,10 +6,15 @@ package frc.robot;
 
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.backUpandGrab;
+import frc.robot.commands.backupAndGrabTurnLeft;
+import frc.robot.commands.backupScoreLowBalance;
+import frc.robot.commands.backupTravelGrab;
 import frc.robot.commands.Drivetrain.PIDdrive;
 import frc.robot.commands.Drivetrain.autoLevel;
 import frc.robot.commands.Drivetrain.autoLevelNoPID;
 import frc.robot.commands.Drivetrain.backupAndBalance;
+import frc.robot.commands.Drivetrain.driveUntilAngle;
 import frc.robot.commands.Gripper.runGripper;
 import frc.robot.commands.elevator.pivotController;
 import frc.robot.commands.elevator.pivotTrapezoid;
@@ -24,6 +29,8 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.driveTrain;
 import frc.robot.subsystems.linearExtension;
 
+import javax.security.auth.AuthPermission;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -35,6 +42,8 @@ import PARTSlib2023.PARTS.frc.commands.PIDTurn;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -53,6 +62,8 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public static beanieController driveController = new beanieController(0);
   public static CommandXboxController operatorController = new CommandXboxController(1);
+  SendableChooser<Command> autoChooser = new SendableChooser<>();
+  
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -60,6 +71,18 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    SmartDashboard.putData("choose auto mode", autoChooser);
+    autoChooser.addOption("Backup and b", new backUpandGrab());
+    autoChooser.addOption("Backup and Grab Left", new backupAndGrabTurnLeft());
+    autoChooser.addOption("backup and balance", new backupScoreLowBalance());
+    autoChooser.addOption("backup, travel and balance", new backupTravelGrab());
+    autoChooser.addOption("noPidBalance", new autoLevelNoPID());
+
+    autoChooser.setDefaultOption("Backup and grab", new backUpandGrab());
+
+    
+
 
     Shuffleboard.getTab("debug").add(new zeroEncoder());
 
@@ -118,7 +141,10 @@ public class RobotContainer {
     //return new SequentialCommandGroup(new extend(12d), new extend(0));  
     //return new linearTrapezoid(0);
     //return new SequentialCommandGroup(new linearTrapezoid(12), new linearTrapezoid(0));
-    return new SequentialCommandGroup(new raiseArmAndDrop(), new PIDdrive(driveTrain.getDriveTrainInstance(),new PIDValues(3.75, .1, 0), Units.inchesToMeters(-6)).withTimeout(2), new PIDTurn(driveTrain.getDriveTrainInstance(),new PIDValues(0.0014, 0.0005, 0) , 90d).withTimeout(3), new PIDdrive(driveTrain.getDriveTrainInstance(),new PIDValues(3.75, .1, 0), Units.inchesToMeters(90)).withTimeout(4), new PIDTurn(driveTrain.getDriveTrainInstance(),new PIDValues(0.0014, 0.0005, 0) , 90d).withTimeout(3) );
-
+    //return new SequentialCommandGroup(new raiseArmAndDrop(), new PIDdrive(driveTrain.getDriveTrainInstance(),new PIDValues(3.75, .1, 0), Units.inchesToMeters(-6)).withTimeout(2), new PIDTurn(driveTrain.getDriveTrainInstance(),new PIDValues(0.0014, 0.0005, 0) , 90d).withTimeout(3), new PIDdrive(driveTrain.getDriveTrainInstance(),new PIDValues(3.75, .1, 0), Units.inchesToMeters(90)).withTimeout(4), new PIDTurn(driveTrain.getDriveTrainInstance(),new PIDValues(0.0014, 0.0005, 0) , 90d).withTimeout(3) );
+    //return new backupAndGrabTurnLeft();
+    //return new driveUntilAngle();
+    // return new backUpandGrab();
+    return autoChooser.getSelected();
   }
 }
