@@ -10,6 +10,7 @@ import frc.robot.commands.backUpandGrab;
 import frc.robot.commands.backupAndGrabTurnLeft;
 import frc.robot.commands.backupScoreLowBalance;
 import frc.robot.commands.backupTravelGrab;
+import frc.robot.commands.secondLevelScore;
 import frc.robot.commands.Drivetrain.PIDdrive;
 import frc.robot.commands.Drivetrain.autoLevel;
 import frc.robot.commands.Drivetrain.autoLevelNoPID;
@@ -78,6 +79,7 @@ public class RobotContainer {
     autoChooser.addOption("backup and balance", new backupScoreLowBalance());
     autoChooser.addOption("backup, travel and balance", new backupTravelGrab());
     autoChooser.addOption("noPidBalance", new autoLevelNoPID());
+    autoChooser.addOption("score level 2", new secondLevelScore());
 
     autoChooser.setDefaultOption("Backup and grab", new backUpandGrab());
 

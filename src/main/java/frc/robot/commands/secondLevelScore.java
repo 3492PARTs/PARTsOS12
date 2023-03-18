@@ -5,19 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Drivetrain.autoLevelNoPID;
-import frc.robot.commands.Drivetrain.backupAndBalance;
-import frc.robot.commands.Gripper.runGripper;
+import frc.robot.commands.elevator.pivotTrapezoid;
 import frc.robot.commands.elevator.raiseArmAndDrop;
+import frc.robot.commands.extender.linearTrapezoid;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class backupScoreLowBalance extends SequentialCommandGroup {
-  /** Creates a new backupScoreLowBalance. */
-  public backupScoreLowBalance() {
+public class secondLevelScore extends SequentialCommandGroup {
+  /** Creates a new secondLevelScore. */
+  public secondLevelScore() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new raiseArmAndDrop().andThen(new runGripper(-1).withTimeout(.5)).andThen(new autoLevelNoPID()));
+    addCommands(new pivotTrapezoid(55).alongWith(new linearTrapezoid(14)).andThen(new raiseArmAndDrop()));
   }
 }

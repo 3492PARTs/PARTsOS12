@@ -22,7 +22,7 @@ public class driveUntilAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.getDriveTrainInstance().move(-.25, -.25);
+    driveTrain.getDriveTrainInstance().move(-.37, -.37);
   }
 
   // Called once the command ends or is interrupted.
