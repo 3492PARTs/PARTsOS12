@@ -46,6 +46,7 @@ public class driveTrain extends beanieDriveTrain {
   static CANSparkMax left1 = new CANSparkMax(18, MotorType.kBrushless);
   static CANSparkMax left2 = new CANSparkMax(10, MotorType.kBrushless);
   static CANSparkMax left3 = new CANSparkMax(23, MotorType.kBrushless);
+  
 
   static CANSparkMax right1 = new CANSparkMax(24, MotorType.kBrushless);
   static CANSparkMax right2 = new CANSparkMax(7, MotorType.kBrushless);
@@ -65,13 +66,13 @@ public class driveTrain extends beanieDriveTrain {
     super(new AHRS(), new MotorControllerGroup(left1,left2, left3), new MotorControllerGroup(right1,right2, right3));
     Shuffleboard.getTab("primary").add(m_field);
 
-    left1.setOpenLoopRampRate(2);
-    left2.setOpenLoopRampRate(2);
-    left3.setOpenLoopRampRate(2);
+    left1.setOpenLoopRampRate(1);
+    left2.setOpenLoopRampRate(1);
+    left3.setOpenLoopRampRate(1);
 
-    right1.setOpenLoopRampRate(2);
-    right2.setOpenLoopRampRate(2);
-    right3.setOpenLoopRampRate(2);
+    right1.setOpenLoopRampRate(1);
+    right2.setOpenLoopRampRate(1);
+    right3.setOpenLoopRampRate(1);
 
     left1.setIdleMode(IdleMode.kBrake);
     left2.setIdleMode(IdleMode.kBrake);
@@ -80,6 +81,14 @@ public class driveTrain extends beanieDriveTrain {
     right1.setIdleMode(IdleMode.kBrake);
     right2.setIdleMode(IdleMode.kBrake);
     right3.setIdleMode(IdleMode.kBrake);
+
+    left1.burnFlash();
+    left2.burnFlash();
+    left3.burnFlash();
+
+    right1.burnFlash();
+    right2.burnFlash();
+    right3.burnFlash();
 
     Shuffleboard.getTab(Constants.debugTab).addNumber("leftDistance", leftDistanceDoubleSupplier());
     Shuffleboard.getTab(Constants.debugTab).addNumber("rightDistance", rightDistanceDoubleSupplier());

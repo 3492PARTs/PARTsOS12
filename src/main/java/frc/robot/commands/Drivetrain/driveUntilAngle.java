@@ -4,14 +4,14 @@
 
 package frc.robot.commands.Drivetrain;
 
+import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.driveTrain;
 
-public class autoLevelNoPID extends CommandBase {
-  /** Creates a new autoLevelNoPID. */
-  public autoLevelNoPID() {
+public class driveUntilAngle extends CommandBase {
+  /** Creates a new driveUntilAngle. */
+  public driveUntilAngle() {
     addRequirements(driveTrain.getDriveTrainInstance());
-
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -22,28 +22,19 @@ public class autoLevelNoPID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(driveTrain.geDriveTrain().getPitch() > 2){
-      driveTrain.getDriveTrainInstance().move(.08, .08);
-    }
-    
-    else if(driveTrain.geDriveTrain().getPitch() < -2){
-      driveTrain.getDriveTrainInstance().move(-.08, -.08);
-    }
-
-    System.out.println("running auto level with no pid" + driveTrain.getDriveTrainInstance().getPitch());
-
+    driveTrain.getDriveTrainInstance().move(-.37, -.37);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     driveTrain.getDriveTrainInstance().move(0, 0);
-
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(driveTrain.getDriveTrainInstance().getPitch()) < 6);
+    
+    return (driveTrain.getDriveTrainInstance().getPitch() < 4) && driveTrain.getDriveTrainInstance().getPitch() > 0;
   }
 }

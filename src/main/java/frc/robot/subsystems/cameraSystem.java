@@ -47,7 +47,7 @@ public class cameraSystem extends SubsystemBase {
                                                                                                        // center.
   RobotPoseEstimator robotPoseEstimator;
   UsbCamera frontCamera;
-  UsbCamera reverseCamera;
+//  UsbCamera reverseCamera;
   MjpegServer view;
 
   private static cameraSystem m_CameraSystem = new cameraSystem();
@@ -71,18 +71,17 @@ public class cameraSystem extends SubsystemBase {
     }
     robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, camList);
     try {
-      frontCamera = CameraServer.startAutomaticCapture(0);
+      frontCamera = CameraServer.startAutomaticCapture();
       frontCamera.setResolution(50, 50);
-      frontCamera.setPixelFormat(PixelFormat.kMJPEG);
-      reverseCamera = CameraServer.startAutomaticCapture(1);
-      reverseCamera.setResolution(50, 50);
-      reverseCamera.setPixelFormat(PixelFormat.kMJPEG);
+      // reverseCamera = CameraServer.startAutomaticCapture(1);
+      // reverseCamera.setResolution(50, 50);
+      // reverseCamera.setPixelFormat(PixelFormat.kMJPEG);
 
       frontCamera.setFPS(10);
-      reverseCamera.setFPS(10);
+      // reverseCamera.setFPS(10);
 
-      frontCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-      reverseCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+      // frontCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+      // reverseCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
       view = new MjpegServer("primary view", "", 8008);
       view.setSource(frontCamera);
@@ -98,14 +97,16 @@ public class cameraSystem extends SubsystemBase {
     try {
       if (controller.getLeftYAxis() >= 0) {
         // System.out.println("Setting camera 2");
-        view.setSource(frontCamera);
+        // view.setSource(frontCamera);
+      }
+      else;
 
-      } else if (controller.getLeftYAxis() < 0) {
-        // System.out.println("Setting camera 1");
-        view.setSource(reverseCamera);
+      // } else if (controller.getLeftYAxis() < 0) {
+      //   // System.out.println("Setting camera 1");
+      //   view.setSource(reverseCamera);
 
       }
-    } catch (Exception e) {
+     catch (Exception e) {
       // TODO: handle exception
     }
 

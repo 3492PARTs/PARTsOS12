@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Drivetrain.autoLevelNoPID;
 import frc.robot.commands.Drivetrain.backupAndBalance;
 import frc.robot.commands.Gripper.runGripper;
 import frc.robot.commands.elevator.raiseArmAndDrop;
@@ -17,6 +18,6 @@ public class backupScoreLowBalance extends SequentialCommandGroup {
   public backupScoreLowBalance() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new raiseArmAndDrop().andThen(new runGripper(-1).withTimeout(.5)).andThen(new backupAndBalance()));
+    addCommands(new raiseArmAndDrop().andThen(new runGripper(-1).withTimeout(.5)).andThen(new autoLevelNoPID()));
   }
 }
