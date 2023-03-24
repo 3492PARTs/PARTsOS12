@@ -2,30 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.extender;
+package frc.robot.commands.elevator;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import static edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.linearExtension;
 
-
-
-
-import static edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
-
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Timer;
 import java.util.function.Consumer;
-
+import java.util.function.Supplier;
 
 /**
  * A command that runs a {@link TrapezoidProfile}. Useful for smoothly controlling mechanism motion.
@@ -33,13 +22,14 @@ import java.util.function.Consumer;
  * <p>This class is provided by the NewCommands VendorDep
  */
 public class PARTSTrapezoidProfileCommand extends CommandBase {
-  private TrapezoidProfile m_profile;
+  private  TrapezoidProfile m_profile;
   private final Consumer<State> m_output;
+  private TrapezoidProfile.Constraints constraints;
+  private TrapezoidProfile.State goal;
+  private Supplier<TrapezoidProfile.State> stateSupplier;
+
 
   private final Timer m_timer = new Timer();
-  double goal;
-  Supplier<State> startingStateSupplier;
-  TrapezoidProfile.Constraints constraints;
 
   /**
    * Creates a new TrapezoidProfileCommand that will execute the given {@link TrapezoidProfile}.
@@ -50,20 +40,20 @@ public class PARTSTrapezoidProfileCommand extends CommandBase {
    * @param requirements The subsystems required by this command.
    */
   public PARTSTrapezoidProfileCommand(
-      TrapezoidProfile profile, Consumer<State> output, double goal, TrapezoidProfile.Constraints constraints, Supplier<TrapezoidProfile.State> startingStateSupplier ,Subsystem... requirements) {
+      TrapezoidProfile profile, TrapezoidProfile.Constraints constraints, TrapezoidProfile.State goal, Supplier<TrapezoidProfile.State> stateSupplier, Consumer<State> output, Subsystem... requirements) {
     m_profile = requireNonNullParam(profile, "profile", "TrapezoidProfileCommand");
     m_output = requireNonNullParam(output, "output", "TrapezoidProfileCommand");
-    addRequirements(requirements);
-    this.startingStateSupplier = startingStateSupplier;
-    this.goal = goal;
     this.constraints = constraints;
+    this.goal = goal;
+    this.stateSupplier = stateSupplier;
+    addRequirements(requirements);
   }
 
   @Override
   public void initialize() {
+    m_profile = new TrapezoidProfile(constraints, goal, stateSupplier.get());
     m_timer.restart();
-    m_profile = new TrapezoidProfile(constraints, new TrapezoidProfile.State(goal, 0), startingStateSupplier.get());
-    
+  
   }
 
   @Override

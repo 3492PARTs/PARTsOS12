@@ -11,14 +11,16 @@ import frc.robot.commands.Drivetrain.autoLevel;
 import frc.robot.commands.Drivetrain.autoLevelNoPID;
 import frc.robot.commands.Drivetrain.backupAndBalance;
 import frc.robot.commands.Gripper.runGripper;
+import frc.robot.commands.elevator.PARTSTrapezoidProfileCommand;
 import frc.robot.commands.elevator.pivotController;
 import frc.robot.commands.elevator.pivotTrapezoid;
+import frc.robot.commands.elevator.profiledPivot;
 import frc.robot.commands.elevator.raiseArmAndDrop;
 import frc.robot.commands.elevator.zeroEncoder;
-import frc.robot.commands.extender.PARTSTrapezoidProfileCommand;
 import frc.robot.commands.extender.extend;
 import frc.robot.commands.extender.linearController;
 import frc.robot.commands.extender.linearTrapezoid;
+import frc.robot.commands.extender.profiledExtend;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.driveTrain;
@@ -118,7 +120,8 @@ public class RobotContainer {
     //return new SequentialCommandGroup(new extend(12d), new extend(0));  
     //return new linearTrapezoid(0);
     //return new SequentialCommandGroup(new linearTrapezoid(12), new linearTrapezoid(0));
-    return new SequentialCommandGroup(new raiseArmAndDrop(), new PIDdrive(driveTrain.getDriveTrainInstance(),new PIDValues(3.75, .1, 0), Units.inchesToMeters(-6)).withTimeout(2), new PIDTurn(driveTrain.getDriveTrainInstance(),new PIDValues(0.0014, 0.0005, 0) , 90d).withTimeout(3), new PIDdrive(driveTrain.getDriveTrainInstance(),new PIDValues(3.75, .1, 0), Units.inchesToMeters(90)).withTimeout(4), new PIDTurn(driveTrain.getDriveTrainInstance(),new PIDValues(0.0014, 0.0005, 0) , 90d).withTimeout(3) );
-
+    //return new SequentialCommandGroup(new raiseArmAndDrop(), new PIDdrive(driveTrain.getDriveTrainInstance(),new PIDValues(3.75, .1, 0), Units.inchesToMeters(-6)).withTimeout(2), new PIDTurn(driveTrain.getDriveTrainInstance(),new PIDValues(0.0014, 0.0005, 0) , 90d).withTimeout(3), new PIDdrive(driveTrain.getDriveTrainInstance(),new PIDValues(3.75, .1, 0), Units.inchesToMeters(90)).withTimeout(4), new PIDTurn(driveTrain.getDriveTrainInstance(),new PIDValues(0.0014, 0.0005, 0) , 90d).withTimeout(3) );
+    //return new profiledPivot(40).andThen(new profiledPivot(0));
+    return new profiledExtend(6).andThen(new profiledExtend(0));
   }
 }

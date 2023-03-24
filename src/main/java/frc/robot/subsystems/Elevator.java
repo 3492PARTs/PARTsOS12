@@ -124,6 +124,11 @@ public class Elevator extends SubsystemBase {
     return output;
   }
 
+  public double calcOutputVoltageFeedForward(double velocity) {
+    double output = (armholdFeedforward.calculate(Math.toRadians((pivotMountAngle + getAngle()) - 95.735), velocity));
+    return output;
+  }
+
   public void driveMotorVolts(double volts) {
     pivotLeader.setVoltage(volts);
   }
