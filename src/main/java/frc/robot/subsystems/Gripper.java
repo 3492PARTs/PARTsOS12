@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,6 +21,7 @@ public class Gripper extends SubsystemBase {
   private TalonSRX rightGripper;
   private static Gripper gripper = new Gripper();
   private boolean hasGamePiece = true;
+  DigitalInput photoEye = new DigitalInput(0);
 
   /** Creates a new Gripper. */
   public Gripper() {
@@ -69,8 +71,13 @@ public class Gripper extends SubsystemBase {
     BottomGripper.set(ControlMode.Current, current);
   }
 
+  public Boolean hasCube() {
+    return photoEye.get();
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  
 }

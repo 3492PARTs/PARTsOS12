@@ -25,8 +25,12 @@ public class runGripper extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    Gripper.getInstance().runGripper(1 * direction);
+    if (Gripper.getInstance().hasCube() && direction > 0) {
+      Gripper.getInstance().runGripper(0.05);
+    }
+    else {
+      Gripper.getInstance().runGripper(1 * direction);
+    }
 
   }
 

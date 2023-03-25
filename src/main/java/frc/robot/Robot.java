@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.angleTurn;
 import frc.robot.commands.Drivetrain.autoLevel;
 import frc.robot.commands.Drivetrain.autoLevelNoPID;
+import frc.robot.commands.Gripper.holdGripper;
 import frc.robot.commands.elevator.holdElevator;
 import frc.robot.commands.elevator.runElevatorTeleop;
 import frc.robot.subsystems.Elevator;
@@ -49,6 +50,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     NetworkTableInstance.getDefault().getEntry("/CameraPublisher/FishEyes/streams").setStringArray(new String[]{"mjpg:http://10.34.92.2:8008/?action=stream"});
     driveTrain.geDriveTrain().calibrateGyro();
+    Gripper.getInstance().setDefaultCommand(new holdGripper());
 
   }
 
