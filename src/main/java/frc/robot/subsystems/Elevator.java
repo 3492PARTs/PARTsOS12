@@ -48,7 +48,7 @@ public class Elevator extends SubsystemBase {
   // add.
   public Elevator() {
     pivotLeader = new CANSparkMax(8, MotorType.kBrushless);
-    ElevatorConstraints = new TrapezoidProfile.Constraints(Math.toRadians(20), Math.toRadians(8));// degrees and
+    ElevatorConstraints = new TrapezoidProfile.Constraints(Math.toRadians(40), Math.toRadians(12));// degrees and
                                                                                                    // degrees/s
 
     armholdFeedforward = new ArmFeedforward(0.039224, 0.31122, 0.012932);

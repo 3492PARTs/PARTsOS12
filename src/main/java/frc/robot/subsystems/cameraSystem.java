@@ -72,7 +72,6 @@ public class cameraSystem extends SubsystemBase {
     robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, camList);
     try {
       frontCamera = CameraServer.startAutomaticCapture();
-      frontCamera.setResolution(50, 50);
       // reverseCamera = CameraServer.startAutomaticCapture(1);
       // reverseCamera.setResolution(50, 50);
       // reverseCamera.setPixelFormat(PixelFormat.kMJPEG);

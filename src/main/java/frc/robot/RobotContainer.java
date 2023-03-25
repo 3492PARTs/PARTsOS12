@@ -19,6 +19,7 @@ import frc.robot.commands.Drivetrain.driveUntilAngle;
 import frc.robot.commands.Gripper.runGripper;
 import frc.robot.commands.elevator.pivotController;
 import frc.robot.commands.elevator.pivotTrapezoid;
+import frc.robot.commands.elevator.profiledPivot;
 import frc.robot.commands.elevator.raiseArmAndDrop;
 import frc.robot.commands.elevator.zeroEncoder;
 import frc.robot.commands.extender.PARTSTrapezoidProfileCommand;
@@ -114,8 +115,8 @@ public class RobotContainer {
     operatorController.x().whileTrue(new linearController(-.2));
     operatorController.b().whileTrue(new linearController(.2));
 
-    driveController.getA().whileTrue(new pivotTrapezoid(0));
-    driveController.getY().whileTrue(new pivotTrapezoid(30));
+    operatorController.a().onTrue(new profiledPivot(0).withTimeout(5));
+    operatorController.y().onTrue(new profiledPivot(40).withTimeout(3));
 
     operatorController.rightTrigger(.4).whileTrue(new runGripper(.5));
     operatorController.leftTrigger(.4).whileTrue(new runGripper(-1));
