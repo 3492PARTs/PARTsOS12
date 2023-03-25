@@ -39,7 +39,7 @@ public class linearExtension extends SubsystemBase {
   double wheelCircumference = Units.inchesToMeters(1.57 * Math.PI);
 
   SimpleMotorFeedforward linearFeedforward = new SimpleMotorFeedforward(0.062877, 8.2899,0.19649);
-  PIDController velocityPID = new PIDController(0, 0, 0); 
+  PIDController velocityPID = new PIDController(.000825, .00001, 0); 
   TrapezoidProfile.Constraints linearConstraints;
   TrapezoidProfile.State stateToBeExecuted = new TrapezoidProfile.State(0,0);
   private static linearExtension m_elevator = new linearExtension();
@@ -48,7 +48,7 @@ public class linearExtension extends SubsystemBase {
 
   public linearExtension() {
     linearMotor = new CANSparkMax(9, MotorType.kBrushless);
-    linearConstraints = new TrapezoidProfile.Constraints(Units.inchesToMeters(5),Units.inchesToMeters(2));// degrees and degrees/s
+    linearConstraints = new TrapezoidProfile.Constraints(Units.inchesToMeters(8),Units.inchesToMeters(3));// degrees and degrees/s
 
     
 
@@ -106,7 +106,7 @@ public class linearExtension extends SubsystemBase {
 
   
   public double calcOutputVoltage(double velocity) {
-    double output = linearFeedforward.calculate(velocity) + velocityPID.calculate(getExtensionRate(), velocity);
+    double output =   linearFeedforward.calculate(velocity) + velocityPID.calculate(getExtensionRate(), velocity);
     return output;
   }
 

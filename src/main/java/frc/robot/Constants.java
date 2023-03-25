@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.security.cert.Extension;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -17,4 +19,24 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
   public static String debugTab = "Debug"; 
+
+  public enum armPosition{
+    home(0.0,0.0),
+    level1(12.0, 0),
+    level2(14.0, 24),
+    level3(0.0, 36);
+
+  public final double Extension;
+  public final double Angle;
+  armPosition(double Extension, double Angle){
+    this.Extension = Extension;
+    this.Angle = Angle;
+
+  }
+
+  }
+
+
+
+
 }

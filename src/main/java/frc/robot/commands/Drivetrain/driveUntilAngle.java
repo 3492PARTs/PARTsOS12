@@ -10,9 +10,16 @@ import frc.robot.subsystems.driveTrain;
 
 public class driveUntilAngle extends CommandBase {
   /** Creates a new driveUntilAngle. */
+  boolean reverse = false;
   public driveUntilAngle() {
     addRequirements(driveTrain.getDriveTrainInstance());
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  public driveUntilAngle(boolean reverse) {
+    addRequirements(driveTrain.getDriveTrainInstance());
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.reverse = reverse;
   }
 
   // Called when the command is initially scheduled.
@@ -22,7 +29,12 @@ public class driveUntilAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(reverse){
+      driveTrain.getDriveTrainInstance().move(.37,.37); // go forward
+    }
+    else{
     driveTrain.getDriveTrainInstance().move(-.37, -.37);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -34,7 +46,12 @@ public class driveUntilAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    return (driveTrain.getDriveTrainInstance().getPitch() < 4) && driveTrain.getDriveTrainInstance().getPitch() > 0;
+    if(!reverse){
+      return (driveTrain.getDriveTrainInstance().getPitch() < 4) && driveTrain.getDriveTrainInstance().getPitch() > 0;
+    }
+    if(reverse){
+      return (driveTrain.getDriveTrainInstance().getPitch() > 4) && driveTrain.getDriveTrainInstance().getPitch() > 0;
+    }
+    else return (driveTrain.getDriveTrainInstance().getPitch() < 4) && driveTrain.getDriveTrainInstance().getPitch() > 0;
   }
 }
