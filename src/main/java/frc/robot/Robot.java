@@ -8,6 +8,7 @@ import PARTSlib2023.PARTS.frc.Utils.dataHolders.PIDValues;
 import PARTSlib2023.PARTS.frc.commands.PIDDrive;
 import PARTSlib2023.PARTS.frc.commands.PIDTurn;
 import PARTSlib2023.PARTS.frc.commands.joystickDrive;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().getEntry("/CameraPublisher/FishEyes/streams").setStringArray(new String[]{"mjpg:http://10.34.92.2:8008/?action=stream"});
     driveTrain.geDriveTrain().calibrateGyro();
     Gripper.getInstance().setDefaultCommand(new holdGripper());
-
+    CameraServer.startAutomaticCapture();
   }
 
   /**

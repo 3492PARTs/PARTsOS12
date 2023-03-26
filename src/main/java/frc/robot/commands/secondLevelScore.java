@@ -17,6 +17,6 @@ public class secondLevelScore extends SequentialCommandGroup {
   public secondLevelScore() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new pivotTrapezoid(55).alongWith(new linearTrapezoid(14)).andThen(new raiseArmAndDrop()));
+    addCommands(new pivotTrapezoid(55).andThen(new linearTrapezoid(14)).andThen(new raiseArmAndDrop()));
   }
 }

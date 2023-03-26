@@ -4,13 +4,16 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.Gripper.holdGripper;
@@ -22,6 +25,8 @@ public class Gripper extends SubsystemBase {
   private static Gripper gripper = new Gripper();
   private boolean hasGamePiece = true;
   DigitalInput photoEye = new DigitalInput(0);
+  DigitalInput photoEye2 = new DigitalInput(1);
+
 
   /** Creates a new Gripper. */
   public Gripper() {
@@ -32,6 +37,7 @@ public class Gripper extends SubsystemBase {
 
     Shuffleboard.getTab(Constants.debugTab).addNumber("leftGripperCurrent", gripperLeftCurrentSupplier());
     Shuffleboard.getTab(Constants.debugTab).addNumber("rightGripperCurrent", gripperRightCurrentSupplier());
+    SmartDashboard.putBoolean("HAS CUBE", hasCubeSupplier().getAsBoolean());
     
     // setDefaultCommand(new holdGripper());
 
@@ -50,7 +56,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public void runGripper(double speed) {
-    leftGripper.set(ControlMode.PercentOutput, -speed);
+    leftGripper.set(ControlMode.PercentOutput, speed);
     rightGripper.set(ControlMode.PercentOutput, -speed);
     //BottomGripper.set(ControlMode.PercentOutput, speed);
   }
@@ -72,10 +78,18 @@ public class Gripper extends SubsystemBase {
   }
 
   public Boolean hasCube() {
-    return photoEye.get();
+    return photoEye.get() || photoEye2.get();
   }
+
+  public BooleanSupplier hasCubeSupplier(){
+    BooleanSupplier s = () -> 
+      hasCube();    
+    return s;
+  }
+
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("HAS CUBE", hasCubeSupplier().getAsBoolean());
     // This method will be called once per scheduler run
   }
 

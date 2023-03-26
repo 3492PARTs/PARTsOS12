@@ -29,6 +29,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class cameraSystem extends SubsystemBase {
@@ -46,7 +47,6 @@ public class cameraSystem extends SubsystemBase {
                                                                                                        // meter up from
                                                                                                        // center.
   RobotPoseEstimator robotPoseEstimator;
-  UsbCamera frontCamera;
 //  UsbCamera reverseCamera;
   MjpegServer view;
 
@@ -71,19 +71,15 @@ public class cameraSystem extends SubsystemBase {
     }
     robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, camList);
     try {
-      frontCamera = CameraServer.startAutomaticCapture();
       // reverseCamera = CameraServer.startAutomaticCapture(1);
       // reverseCamera.setResolution(50, 50);
       // reverseCamera.setPixelFormat(PixelFormat.kMJPEG);
 
-      frontCamera.setFPS(10);
       // reverseCamera.setFPS(10);
 
       // frontCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
       // reverseCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
-      view = new MjpegServer("primary view", "", 8008);
-      view.setSource(frontCamera);
 
       CameraServer.addServer(view);
     } catch (Exception e) {

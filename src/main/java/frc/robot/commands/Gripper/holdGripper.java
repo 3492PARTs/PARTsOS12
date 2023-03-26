@@ -22,7 +22,7 @@ public class holdGripper extends CommandBase {
   @Override
   public void execute() {
     if(Gripper.getInstance().hasCube()){
-      Gripper.getInstance().runCurrent(5);
+      Gripper.getInstance().runCurrent(10);
     }
   }
 

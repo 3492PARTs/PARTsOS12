@@ -11,6 +11,7 @@ import frc.robot.commands.backupAndGrabTurnLeft;
 import frc.robot.commands.backupScoreLowBalance;
 import frc.robot.commands.backupTravelGrab;
 import frc.robot.commands.secondLevelScore;
+import frc.robot.commands.throwInCommunityAndGrabAnother;
 import frc.robot.commands.Drivetrain.PIDdrive;
 import frc.robot.commands.Drivetrain.autoLevel;
 import frc.robot.commands.Drivetrain.autoLevelNoPID;
@@ -21,6 +22,7 @@ import frc.robot.commands.elevator.pivotController;
 import frc.robot.commands.elevator.pivotTrapezoid;
 import frc.robot.commands.elevator.profiledPivot;
 import frc.robot.commands.elevator.raiseArmAndDrop;
+import frc.robot.commands.elevator.scoreHighAndHome;
 import frc.robot.commands.elevator.zeroEncoder;
 import frc.robot.commands.extender.PARTSTrapezoidProfileCommand;
 import frc.robot.commands.extender.extend;
@@ -43,6 +45,7 @@ import PARTSlib2023.PARTS.frc.commands.PIDDrive;
 import PARTSlib2023.PARTS.frc.commands.PIDTurn;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,6 +53,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -65,6 +69,7 @@ public class RobotContainer {
   public static beanieController driveController = new beanieController(0);
   public static CommandXboxController operatorController = new CommandXboxController(1);
   SendableChooser<Command> autoChooser = new SendableChooser<>();
+  public static CommandGenericHID buttonBox = new CommandGenericHID(3);
   
 
 
@@ -81,6 +86,9 @@ public class RobotContainer {
     autoChooser.addOption("backup, travel and balance", new backupTravelGrab());
     autoChooser.addOption("noPidBalance", new autoLevelNoPID());
     autoChooser.addOption("score level 2", new secondLevelScore());
+    autoChooser.addOption("score level 3", new scoreHighAndHome());
+    autoChooser.addOption("throw into community", new throwInCommunityAndGrabAnother());
+
 
     autoChooser.setDefaultOption("Backup and grab", new backUpandGrab());
 
@@ -115,14 +123,17 @@ public class RobotContainer {
     operatorController.x().whileTrue(new linearController(-.2));
     operatorController.b().whileTrue(new linearController(.2));
 
-    operatorController.a().onTrue(new profiledPivot(0).withTimeout(5));
-    operatorController.y().onTrue(new profiledPivot(40).withTimeout(3));
+    operatorController.povDown().whileTrue(new profiledPivot(0).withTimeout(5));
+    operatorController.povUp().whileTrue(new profiledPivot(40).withTimeout(3));
 
     operatorController.rightTrigger(.4).whileTrue(new runGripper(.5));
-    operatorController.leftTrigger(.4).whileTrue(new runGripper(-1));
+    operatorController.leftTrigger(.4).whileTrue(new runGripper(-.5));
+    operatorController.leftBumper().whileTrue(new runGripper(-1));
 
-    
-    
+    buttonBox.button(6).whileTrue(new profiledPivot(0));
+    buttonBox.button(5).whileTrue(new profiledPivot(40));
+    buttonBox.button(3).whileTrue(new profiledPivot(50));
+    buttonBox.button(4).whileTrue(new profiledPivot(70));    
 
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
