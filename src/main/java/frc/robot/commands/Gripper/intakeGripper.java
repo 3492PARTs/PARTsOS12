@@ -7,11 +7,11 @@ package frc.robot.commands.Gripper;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Gripper;
 
-public class runGripper extends CommandBase {
+public class intakeGripper extends CommandBase {
   /** Creates a new runGripper. */
   double direction;
 
-  public runGripper(double direction) {
+  public intakeGripper(double direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Gripper.getInstance());
     this.direction = direction;
@@ -25,10 +25,12 @@ public class runGripper extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-
+    if (Gripper.getInstance().hasCube() && direction > 0) {
+      Gripper.getInstance().runGripper(0.2);
+    }
+    else {
       Gripper.getInstance().runGripper(1 * direction);
-
+    }
 
   }
 
@@ -41,6 +43,6 @@ public class runGripper extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Gripper.getInstance().hasCube();
   }
 }

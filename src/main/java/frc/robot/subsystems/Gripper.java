@@ -25,7 +25,6 @@ public class Gripper extends SubsystemBase {
   private static Gripper gripper = new Gripper();
   private boolean hasGamePiece = true;
   DigitalInput photoEye = new DigitalInput(0);
-  DigitalInput photoEye2 = new DigitalInput(1);
 
 
   /** Creates a new Gripper. */
@@ -78,7 +77,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public Boolean hasCube() {
-    return photoEye.get() || photoEye2.get();
+    return photoEye.get();
   }
 
   public BooleanSupplier hasCubeSupplier(){
@@ -90,6 +89,8 @@ public class Gripper extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("HAS CUBE", hasCubeSupplier().getAsBoolean());
+    SmartDashboard.putBoolean("Sensor 0", photoEye.get());
+
     // This method will be called once per scheduler run
   }
 

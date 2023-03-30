@@ -37,5 +37,6 @@ public class linearTrapezoid extends TrapezoidProfileCommand {
 
         },
         linearExtension.getInstance());
+
   }
 }

@@ -127,8 +127,8 @@ public class RobotContainer {
     operatorController.povUp().whileTrue(new profiledPivot(40).withTimeout(3));
 
     operatorController.rightTrigger(.4).whileTrue(new runGripper(.5));
-    operatorController.leftTrigger(.4).whileTrue(new runGripper(-.5));
-    operatorController.leftBumper().whileTrue(new runGripper(-1));
+    operatorController.leftTrigger(.4).whileTrue(new runGripper(-1));
+    operatorController.leftBumper().whileTrue(new runGripper(-.5));
 
     buttonBox.button(6).whileTrue(new profiledPivot(0));
     buttonBox.button(5).whileTrue(new profiledPivot(40));

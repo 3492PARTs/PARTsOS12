@@ -22,6 +22,7 @@ import frc.robot.commands.Drivetrain.autoLevelNoPID;
 import frc.robot.commands.Gripper.holdGripper;
 import frc.robot.commands.elevator.holdElevator;
 import frc.robot.commands.elevator.runElevatorTeleop;
+import frc.robot.commands.extender.stopExtender;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gripper;
 import frc.robot.subsystems.cameraSystem;
@@ -117,6 +118,7 @@ public class Robot extends TimedRobot {
     Elevator.getInstance().setDefaultCommand(new runElevatorTeleop(RobotContainer.operatorController));
 
     driveTrain.geDriveTrain().setDefaultCommand(new joystickDrive(driveTrain.getDriveTrainInstance(), RobotContainer.driveController));
+    new stopExtender().schedule();
   }
 
   /** This function is called periodically during operator control. */

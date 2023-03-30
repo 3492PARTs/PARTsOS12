@@ -9,6 +9,7 @@ import PARTSlib2023.PARTS.frc.commands.PIDTurn;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Drivetrain.PIDdrive;
+import frc.robot.commands.Gripper.intakeGripper;
 import frc.robot.commands.Gripper.runGripper;
 import frc.robot.commands.extender.linearTrapezoid;
 import frc.robot.subsystems.driveTrain;
@@ -21,6 +22,6 @@ public class throwInCommunityAndGrabAnother extends SequentialCommandGroup {
   public throwInCommunityAndGrabAnother() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new runGripper(-1).withTimeout(1).alongWith(new PIDdrive(driveTrain.geDriveTrain(), new PIDValues(3.75, .1, 0), Units.inchesToMeters(-72)).withTimeout(4)), new PIDTurn(driveTrain.geDriveTrain(), new PIDValues(0.001, 0.0005, 0), 171).withTimeout(2.5),new PIDdrive(driveTrain.geDriveTrain(), new PIDValues(3.75, .1, 0), Units.inchesToMeters(30)).alongWith(new linearTrapezoid(26)), new PIDdrive(driveTrain.geDriveTrain(), new PIDValues(3.75, .1, 0), Units.inchesToMeters(6)).alongWith(new runGripper(1).withTimeout(1)));
+    addCommands(new PIDdrive(driveTrain.geDriveTrain(), new PIDValues(3.75, .1, 0), Units.inchesToMeters(-12)).withTimeout(1),new PIDdrive(driveTrain.geDriveTrain(), new PIDValues(3.75, .1, 0), Units.inchesToMeters(50)).withTimeout(4), new PIDdrive(driveTrain.geDriveTrain(), new PIDValues(3.75, .1, 0), Units.inchesToMeters(70)).alongWith(new linearTrapezoid(26)).alongWith(new intakeGripper(1)),new intakeGripper(1).withTimeout(3));
   }
 }
