@@ -51,7 +51,7 @@ public class driveTrain extends beanieDriveTrain {
 
   static CANSparkMax right1 = new CANSparkMax(24, MotorType.kBrushless);
   static CANSparkMax right2 = new CANSparkMax(7, MotorType.kBrushless);
-  static CANSparkMax right3 = new CANSparkMax(16, MotorType.kBrushless);
+  static CANSparkMax right3 = new CANSparkMax(21, MotorType.kBrushless);
 
   DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics(1.421); // tbd
   DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(),

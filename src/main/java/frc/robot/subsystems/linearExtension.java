@@ -62,6 +62,7 @@ public class linearExtension extends SubsystemBase {
     linearMotor.setSmartCurrentLimit(20, 20);
 
     linear1Controller = linearMotor.getPIDController();
+    linearMotor.burnFlash();
 
     
 
@@ -106,7 +107,7 @@ public class linearExtension extends SubsystemBase {
 
   
   public double calcOutputVoltage(double velocity) {
-    double output =   linearFeedforward.calculate(velocity) + velocityPID.calculate(getExtensionRate(), velocity);
+    double output =   -(linearFeedforward.calculate(velocity) + velocityPID.calculate(getExtensionRate(), velocity));
     return output;
   }
 

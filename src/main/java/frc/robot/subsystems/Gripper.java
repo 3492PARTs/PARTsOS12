@@ -55,7 +55,7 @@ public class Gripper extends SubsystemBase {
   }
 
   public void runGripper(double speed) {
-    leftGripper.set(ControlMode.PercentOutput, speed);
+    leftGripper.set(ControlMode.PercentOutput, -speed);
     rightGripper.set(ControlMode.PercentOutput, -speed);
     //BottomGripper.set(ControlMode.PercentOutput, speed);
   }

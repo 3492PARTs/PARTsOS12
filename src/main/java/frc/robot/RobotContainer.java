@@ -69,7 +69,7 @@ public class RobotContainer {
   public static beanieController driveController = new beanieController(0);
   public static CommandXboxController operatorController = new CommandXboxController(1);
   SendableChooser<Command> autoChooser = new SendableChooser<>();
-  public static CommandGenericHID buttonBox = new CommandGenericHID(3);
+  //public static CommandGenericHID buttonBox = new CommandGenericHID(3);
   
 
 
@@ -120,8 +120,8 @@ public class RobotContainer {
 
     // operatorController.y().whileTrue(new pivotController(.1));
     // operatorController.a().whileTrue(new pivotController(-.1));
-    operatorController.x().whileTrue(new linearController(-.2));
-    operatorController.b().whileTrue(new linearController(.2));
+    operatorController.x().whileTrue(new linearController(.2));
+    operatorController.b().whileTrue(new linearController(-.2));
 
     operatorController.povDown().whileTrue(new profiledPivot(0).withTimeout(5));
     operatorController.povUp().whileTrue(new profiledPivot(40).withTimeout(3));
@@ -130,17 +130,19 @@ public class RobotContainer {
     operatorController.leftTrigger(.4).whileTrue(new runGripper(-1));
     operatorController.leftBumper().whileTrue(new runGripper(-.5));
 
+    driveController.getX().and(driveController.getB()).whileTrue(new backupTravelGrab());
+/* 
     buttonBox.button(6).whileTrue(new profiledPivot(0));
     buttonBox.button(5).whileTrue(new profiledPivot(40));
     buttonBox.button(3).whileTrue(new profiledPivot(50));
     buttonBox.button(4).whileTrue(new profiledPivot(70));    
-
+*/
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
   }
 
-  /**
+  /**k
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
